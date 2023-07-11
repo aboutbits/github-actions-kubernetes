@@ -3,24 +3,26 @@
 A collection of GitHub actions for Kubernetes.
 
 ## Setup DigitalOcean
+
 Setup Digital-Ocean CLI and configure Kubernetes.
 
 ### Example
 
 ```yaml
-  - uses: aboutbits/github-actions-kubernetes/setup-digital-ocean@v1
+  - uses: aboutbits/github-actions-kubernetes/setup-kubectl@v1
     with:
-      cluster-name: ${{ env.TEST_CLUSTER_NAME }}
       digital-ocean-token: ${{ secrets.DIGITALOCEAN_TOKEN }}
+      cluster-name: ${{ env.CLUSTER_NAME }}
 ```
 
 ## Deploy to Kubernetes
+
 Deploy application to a Kubernetes Cluster. Requires Kubernetes to be configured first.
 
 ### Example
 
 ```yaml
-  - uses: aboutbits/github-actions-kubernetes/deploy-to-kubernetes@v1
+  - uses: aboutbits/github-actions-kubernetes/deploy@v1
     with:
       environment: 'test'
       namespace-name: ${{ env.NAMESPACE_NAME }}

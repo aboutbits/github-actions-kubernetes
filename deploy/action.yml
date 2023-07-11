@@ -1,11 +1,11 @@
 name: 'Deploy to Kubernetes'
-description: 'Deploy application to a Kubernetes Cluster. Requires Kubernetes to be configured first.'
+description: 'Deploy an application to a Kubernetes cluster.'
 
 inputs:
   environment:
     description: '"test" or "prod"'
   namespace-name:
-    description: 'Digital Ocean namespace name'
+    description: 'Kubernetes namespace name'
   deployment-name:
     description: 'Kubernetes deployment name'
 

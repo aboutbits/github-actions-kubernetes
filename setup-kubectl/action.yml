@@ -1,11 +1,11 @@
-name: 'Setup Kubernetes for Digital-Ocean.'
-description: 'Setup Digital-Ocean CLI and configure Kubernetes.'
+name: 'Setup kubectl for DigitalOcean.'
+description: 'Setup DigitalOcean CLI and configure kubectl.'
 
 inputs:
-  cluster-name:
-    description: 'Kubernetes cluster name'
   digital-ocean-token:
     description: 'Digital Ocean access token'
+  cluster-name:
+    description: 'Kubernetes cluster name'
 
 runs:
   using: "composite"
