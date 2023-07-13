@@ -2,7 +2,7 @@ name: 'Deploy to Kubernetes'
 description: 'Deploy an application to a Kubernetes cluster.'
 
 inputs:
-  environment:
+  deployment-file:
     description: '"test" or "prod"'
   namespace-name:
     description: 'Kubernetes namespace name'
@@ -13,7 +13,7 @@ runs:
   using: "composite"
   steps:
     - name: Deploy to Kubernetes
-      run: kubectl apply -f infrastructure/kubernetes.${{ inputs.environment }}.yml
+      run: kubectl apply -f ${{ inputs.deployment-file }}
       shell: bash
 
     - name: Verify deployment

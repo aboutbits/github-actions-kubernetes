@@ -9,7 +9,7 @@ Setup Digital-Ocean CLI and configure Kubernetes.
 ### Example
 
 ```yaml
-  - uses: aboutbits/github-actions-kubernetes/setup-kubectl@v1
+  - uses: aboutbits/github-actions-kubernetes/do-setup-kubectl@v1
     with:
       digital-ocean-token: ${{ secrets.DIGITALOCEAN_TOKEN }}
       cluster-name: ${{ env.CLUSTER_NAME }}
@@ -24,7 +24,7 @@ Deploy application to a Kubernetes Cluster. Requires Kubernetes to be configured
 ```yaml
   - uses: aboutbits/github-actions-kubernetes/deploy@v1
     with:
-      environment: 'test'
+      deployment-file: 'infrastructure/kubernetes.prod.yml'
       namespace-name: ${{ env.NAMESPACE_NAME }}
       deployment-name: ${{ env.DEPLOYMENT_NAME }}
 ```
