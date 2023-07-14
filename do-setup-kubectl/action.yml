@@ -4,8 +4,10 @@ description: 'Setup DigitalOcean CLI and configure kubectl.'
 inputs:
   digital-ocean-token:
     description: 'Digital Ocean access token'
+    required: true
   cluster-name:
     description: 'Kubernetes cluster name'
+    required: true
 
 runs:
   using: "composite"

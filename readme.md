@@ -1,12 +1,14 @@
 # GitHub Actions Kubernetes
 
-A collection of GitHub actions for Kubernetes.
+A collection of Kubernetes related GitHub actions.
 
-## Setup DigitalOcean
+## Actions
+
+### Setup DigitalOcean
 
 Setup Digital-Ocean CLI and configure Kubernetes.
 
-### Example
+#### Example
 
 ```yaml
   - uses: aboutbits/github-actions-kubernetes/do-setup-kubectl@v1
@@ -15,11 +17,21 @@ Setup Digital-Ocean CLI and configure Kubernetes.
       cluster-name: ${{ env.CLUSTER_NAME }}
 ```
 
-## Deploy to Kubernetes
+#### Inputs
+
+Following inputs can be used as `step.with` keys
+
+| Name                     | Required/Default   | Description                     |
+|--------------------------|--------------------|---------------------------------|
+| `digital-ocean-token`    | required           | Digital Ocean access token      |
+| `cluster-name`           | required           | Kubernetes cluster name         |
+
+
+### Deploy to Kubernetes
 
 Deploy application to a Kubernetes Cluster. Requires Kubernetes to be configured first.
 
-### Example
+#### Example
 
 ```yaml
   - uses: aboutbits/github-actions-kubernetes/deploy@v1
@@ -28,6 +40,17 @@ Deploy application to a Kubernetes Cluster. Requires Kubernetes to be configured
       namespace-name: ${{ env.NAMESPACE_NAME }}
       deployment-name: ${{ env.DEPLOYMENT_NAME }}
 ```
+
+#### Inputs
+
+Following inputs can be used as `step.with` keys
+
+| Name                 | Required/Default   | Description                               |
+|----------------------|--------------------|-------------------------------------------|
+| `deployment-file`    | required           | Deployment file for kubectl to apply      |
+| `namespace-name`     | required           | Kubernetes namespace name                 |
+| `deployment-name`    | required           | Kubernetes deployment name                |
+
 
 ## Versioning
 

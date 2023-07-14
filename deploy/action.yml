@@ -3,11 +3,14 @@ description: 'Deploy an application to a Kubernetes cluster.'
 
 inputs:
   deployment-file:
-    description: '"test" or "prod"'
+    description: 'Deployment file for kubectl to apply'
+    required: true
   namespace-name:
     description: 'Kubernetes namespace name'
+    required: true
   deployment-name:
     description: 'Kubernetes deployment name'
+    required: true
 
 runs:
   using: "composite"
