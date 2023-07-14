@@ -1,0 +1,34 @@
+name: 'Deploy to Kubernetes'
+description: 'Deploy an application to a Kubernetes cluster'
+
+inputs:
+  working-directory:
+    description: 'The working directory'
+    default: '.'
+  deployment-file:
+    description: 'Deployment file for kubectl to apply'
+    required: true
+  namespace-name:
+    description: 'Kubernetes namespace name'
+    required: true
+  deployment-name:
+    description: 'Kubernetes deployment name'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Deploy to Kubernetes
+      working-directory: ${{ inputs.working-directory }}
+      run: kubectl apply -f ${{ inputs.deployment-file }}
+      shell: bash
+
+    - name: Verify deployment
+      id: verify
+      run: kubectl rollout status -n ${{ inputs.namespace-name }} deployment/${{ inputs.deployment-name }}
+      shell: bash
+
+    - name: Undo deployment if failed
+      if: ${{ failure() && steps.verify.conclusion == 'failure' }}
+      run: kubectl rollout undo -n ${{ inputs.namespace-name }} deployment/${{ inputs.deployment-name }}
+      shell: bash

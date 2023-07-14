@@ -1,0 +1,22 @@
+name: 'Setup kubectl for DigitalOcean.'
+description: 'Setup DigitalOcean CLI and configure kubectl'
+
+inputs:
+  digital-ocean-token:
+    description: 'Digital Ocean access token'
+    required: true
+  cluster-name:
+    description: 'Kubernetes cluster name'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install doctl
+      uses: digitalocean/action-doctl@v2
+      with:
+        token: ${{ inputs.digital-ocean-token }}
+
+    - name: Save DigitalOcean kubeconfig with short-lived credentials
+      run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 ${{ inputs.cluster-name }}
+      shell: bash

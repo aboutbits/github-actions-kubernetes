@@ -1,19 +1,61 @@
 # GitHub Actions Kubernetes
 
-A collection of GitHub actions for Kubernetes projects.
+A collection of Kubernetes related GitHub actions.
 
-## Example Playbook
+## Actions
+
+### Setup DigitalOcean
+
+Setup Digital-Ocean CLI and configure Kubernetes.
+
+#### Example
 
 ```yaml
-  - name: Build code
-    uses: aboutbits/github-actions-kubernetes/xxx@v1
+  - uses: aboutbits/github-actions-kubernetes/do-setup-kubectl@v1
     with:
-      xxx-version: ${{ env.NODE_VERSION }}
+      digital-ocean-token: ${{ secrets.DIGITALOCEAN_TOKEN }}
+      cluster-name: ${{ env.CLUSTER_NAME }}
 ```
+
+#### Inputs
+
+The following inputs can be used as `step.with` keys:
+
+| Name                     | Required/Default   | Description                     |
+|--------------------------|--------------------|---------------------------------|
+| `digital-ocean-token`    | required           | Digital Ocean access token      |
+| `cluster-name`           | required           | Kubernetes cluster name         |
+
+
+### Deploy to Kubernetes
+
+Deploy application to a Kubernetes Cluster. Requires Kubernetes to be configured first.
+
+#### Example
+
+```yaml
+  - uses: aboutbits/github-actions-kubernetes/deploy@v1
+    with:
+      deployment-file: 'infrastructure/kubernetes.prod.yml'
+      namespace-name: ${{ env.NAMESPACE_NAME }}
+      deployment-name: ${{ env.DEPLOYMENT_NAME }}
+```
+
+#### Inputs
+
+The following inputs can be used as `step.with` keys:
+
+| Name                   | Required/Default     | Description                                |
+|------------------------|----------------------|--------------------------------------------|
+| `deployment-file`      | required             | Deployment file for kubectl to apply       |
+| `namespace-name`       | required             | Kubernetes namespace name                  |
+| `deployment-name`      | required             | Kubernetes deployment name                 |
+| `working-directory`    | `.`                  | The working directory                      |
+
 
 ## Versioning
 
-In order to have a verioning in place and working, create leightweight tags that point to the appropriate minor release versions.
+In order to have a versioning in place and working, create lightweight tags that point to the appropriate minor release versions.
 
 Creating a new minor release:
 
