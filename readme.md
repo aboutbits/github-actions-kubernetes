@@ -19,7 +19,7 @@ Setup Digital-Ocean CLI and configure Kubernetes.
 
 #### Inputs
 
-Following inputs can be used as `step.with` keys
+The following inputs can be used as `step.with` keys:
 
 | Name                     | Required/Default   | Description                     |
 |--------------------------|--------------------|---------------------------------|
@@ -43,13 +43,14 @@ Deploy application to a Kubernetes Cluster. Requires Kubernetes to be configured
 
 #### Inputs
 
-Following inputs can be used as `step.with` keys
+The following inputs can be used as `step.with` keys:
 
-| Name                 | Required/Default   | Description                               |
-|----------------------|--------------------|-------------------------------------------|
-| `deployment-file`    | required           | Deployment file for kubectl to apply      |
-| `namespace-name`     | required           | Kubernetes namespace name                 |
-| `deployment-name`    | required           | Kubernetes deployment name                |
+| Name                   | Required/Default     | Description                                |
+|------------------------|----------------------|--------------------------------------------|
+| `deployment-file`      | required             | Deployment file for kubectl to apply       |
+| `namespace-name`       | required             | Kubernetes namespace name                  |
+| `deployment-name`      | required             | Kubernetes deployment name                 |
+| `working-directory`    | `.`                  | The working directory                      |
 
 
 ## Versioning

@@ -1,5 +1,5 @@
 name: 'Setup kubectl for DigitalOcean.'
-description: 'Setup DigitalOcean CLI and configure kubectl.'
+description: 'Setup DigitalOcean CLI and configure kubectl'
 
 inputs:
   digital-ocean-token:

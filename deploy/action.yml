@@ -1,7 +1,10 @@
 name: 'Deploy to Kubernetes'
-description: 'Deploy an application to a Kubernetes cluster.'
+description: 'Deploy an application to a Kubernetes cluster'
 
 inputs:
+  working-directory:
+    description: 'The working directory'
+    default: '.'
   deployment-file:
     description: 'Deployment file for kubectl to apply'
     required: true
@@ -16,6 +19,7 @@ runs:
   using: "composite"
   steps:
     - name: Deploy to Kubernetes
+      working-directory: ${{ inputs.working-directory }}
       run: kubectl apply -f ${{ inputs.deployment-file }}
       shell: bash
 
