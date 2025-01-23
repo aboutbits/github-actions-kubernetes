@@ -27,7 +27,7 @@ The following inputs can be used as `step.with` keys:
 | `cluster-name`           | required           | Kubernetes cluster name         |
 
 
-### Deploy to Kubernetes
+### Deploy to Kubernetes using kubectl
 
 Deploy application to a Kubernetes Cluster. Requires Kubernetes to be configured first.
 
