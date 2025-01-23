@@ -52,6 +52,35 @@ The following inputs can be used as `step.with` keys:
 | `deployment-name`      | required             | Kubernetes deployment name                 |
 | `working-directory`    | `.`                  | The working directory                      |
 
+### Deploy to Kubernetes using Helm
+
+Deploy an application to a Kubernetes cluster using its Helm diagram. Requires Kubernetes to be configured first.
+
+#### Example
+
+```yaml
+  - uses: ./.github/actions/helm-deploy
+    with:
+      release-name: my-app
+      chart-path: my-chart
+      image-tag: "1.0.0"
+      values-file: environments/values-test.yaml
+      timeout: 5m
+      working-directory: ./infrastructure
+```
+
+#### Inputs
+
+The following inputs can be used as `step.with` keys:
+
+| Name                | Required/Default | Description                  |
+|---------------------|------------------|------------------------------|
+| `release-name`      | required         | The name of the Helm release |
+| `values-file`       | required         | Path to the Helm values file |
+| `working-directory` | `.`              | The working directory        |
+| `chart-path`        | `.`              | Path to the Helm chart       |
+| `image-tag`         | `latest`         | Tag of the container image   |
+| `timeout`           | `5m`             | Timeout for the Helm command |
 
 ## Versioning
 
