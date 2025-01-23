@@ -6,7 +6,7 @@ inputs:
     description: 'The name of the Helm release'
     required: true
   chart-path:
-    description: 'Path to the Helm chart'
+    description: 'The directory of the Helm chart'
     default: '.'
   values-file:
     description: 'Path to the Helm values file'
