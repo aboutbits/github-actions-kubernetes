@@ -11,7 +11,7 @@ Setup Digital-Ocean CLI and configure Kubernetes.
 #### Example
 
 ```yaml
-  - uses: aboutbits/github-actions-kubernetes/do-setup-kubectl@v1
+  - uses: aboutbits/github-actions-kubernetes/do-setup-kubectl@v2
     with:
       digital-ocean-token: ${{ secrets.DIGITALOCEAN_TOKEN }}
       cluster-name: ${{ env.CLUSTER_NAME }}
@@ -34,7 +34,7 @@ Deploy application to a Kubernetes Cluster. Requires Kubernetes to be configured
 #### Example
 
 ```yaml
-  - uses: aboutbits/github-actions-kubernetes/deploy@v1
+  - uses: aboutbits/github-actions-kubernetes/kubectl-deploy@v2
     with:
       deployment-file: 'infrastructure/kubernetes.prod.yml'
       namespace-name: ${{ env.NAMESPACE_NAME }}
@@ -59,10 +59,10 @@ Deploy an application to a Kubernetes cluster using its Helm diagram. Requires K
 #### Example
 
 ```yaml
-  - uses: ./.github/actions/helm-deploy
+  - uses: aboutbits/github-actions-kubernetes/helm-deploy@v2
     with:
       release-name: my-app
-      chart-path: my-chart
+      chart-directory: my-chart
       image-tag: "1.0.0"
       values-file: environments/values-test.yaml
       timeout: 5m
@@ -73,14 +73,14 @@ Deploy an application to a Kubernetes cluster using its Helm diagram. Requires K
 
 The following inputs can be used as `step.with` keys:
 
-| Name                | Required/Default | Description                  |
-|---------------------|------------------|------------------------------|
-| `release-name`      | required         | The name of the Helm release |
-| `values-file`       | required         | Path to the Helm values file |
-| `working-directory` | `.`              | The working directory        |
-| `chart-path`        | `.`              | Path to the Helm chart       |
-| `image-tag`         | `latest`         | Tag of the container image   |
-| `timeout`           | `5m`             | Timeout for the Helm command |
+| Name                | Required/Default | Description                        |
+|---------------------|------------------|------------------------------------|
+| `release-name`      | required         | The name of the Helm release       |
+| `values-file`       | required         | Path to the Helm values file       |
+| `working-directory` | `.`              | The working directory              |
+| `chart-directory`   | `.`              | Root directory of the helm diagram |
+| `image-tag`         | `latest`         | Tag of the container image         |
+| `timeout`           | `5m`             | Timeout for the Helm command       |
 
 ## Versioning
 
