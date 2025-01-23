@@ -1,0 +1,34 @@
+name: 'Deploy Helm chart to Kubernetes'
+description: 'Deploy an application to a Kubernetes cluster using its Helm chart'
+
+inputs:
+  release-name:
+    description: 'The name of the Helm release'
+    required: true
+  chart-path:
+    description: 'The directory of the Helm chart'
+    default: '.'
+  values-file:
+    description: 'Path to the Helm values file'
+    required: true
+  image-tag:
+    description: 'Tag of the container image'
+    default: 'latest'
+  timeout:
+    description: 'Timeout for the Helm command'
+    default: '5m'
+  working-directory:
+    description: 'The working directory'
+    default: '.'
+
+runs:
+  using: "composite"
+  steps:
+    - name: Deploy Helm Chart
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: |
+        helm upgrade --wait --install ${{ inputs.release-name }} ${{ inputs.chart-path }} \
+          --values ${{ inputs.values-file }} \
+          --atomic --timeout ${{ inputs.timeout }} \
+          --set image.tag=${{ inputs.image-tag }}

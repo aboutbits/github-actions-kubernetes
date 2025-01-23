@@ -20,3 +20,6 @@ runs:
     - name: Save DigitalOcean kubeconfig with short-lived credentials
       run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 ${{ inputs.cluster-name }}
       shell: bash
+
+    - name: Setup helm
+      uses: azure/setup-helm@v4.2.0

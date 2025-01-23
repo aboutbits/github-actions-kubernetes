@@ -11,7 +11,7 @@ Setup Digital-Ocean CLI and configure Kubernetes.
 #### Example
 
 ```yaml
-  - uses: aboutbits/github-actions-kubernetes/do-setup-kubectl@v1
+  - uses: aboutbits/github-actions-kubernetes/do-setup-kubectl@v2
     with:
       digital-ocean-token: ${{ secrets.DIGITALOCEAN_TOKEN }}
       cluster-name: ${{ env.CLUSTER_NAME }}
@@ -27,14 +27,14 @@ The following inputs can be used as `step.with` keys:
 | `cluster-name`           | required           | Kubernetes cluster name         |
 
 
-### Deploy to Kubernetes
+### Deploy to Kubernetes using kubectl
 
 Deploy application to a Kubernetes Cluster. Requires Kubernetes to be configured first.
 
 #### Example
 
 ```yaml
-  - uses: aboutbits/github-actions-kubernetes/deploy@v1
+  - uses: aboutbits/github-actions-kubernetes/kubectl-deploy@v2
     with:
       deployment-file: 'infrastructure/kubernetes.prod.yml'
       namespace-name: ${{ env.NAMESPACE_NAME }}
@@ -52,6 +52,35 @@ The following inputs can be used as `step.with` keys:
 | `deployment-name`      | required             | Kubernetes deployment name                 |
 | `working-directory`    | `.`                  | The working directory                      |
 
+### Deploy to Kubernetes using Helm
+
+Deploy an application to a Kubernetes cluster using its Helm diagram. Requires Kubernetes to be configured first.
+
+#### Example
+
+```yaml
+  - uses: aboutbits/github-actions-kubernetes/helm-deploy@v2
+    with:
+      release-name: my-app
+      chart-directory: my-chart
+      image-tag: "1.0.0"
+      values-file: environments/values-test.yaml
+      timeout: 5m
+      working-directory: ./infrastructure
+```
+
+#### Inputs
+
+The following inputs can be used as `step.with` keys:
+
+| Name                | Required/Default | Description                        |
+|---------------------|------------------|------------------------------------|
+| `release-name`      | required         | The name of the Helm release       |
+| `values-file`       | required         | Path to the Helm values file       |
+| `working-directory` | `.`              | The working directory              |
+| `chart-directory`   | `.`              | Root directory of the helm diagram |
+| `image-tag`         | `latest`         | Tag of the container image         |
+| `timeout`           | `5m`             | Timeout for the Helm command       |
 
 ## Versioning
 
@@ -60,16 +89,16 @@ In order to have a versioning in place and working, create lightweight tags that
 Creating a new minor release:
 
 ```bash
-git tag v1
+git tag v2
 git push --tags
 ```
 
 Replacing an already existing minor release:
 
 ```bash
-git tag -d v1
-git push origin :refs/tags/v1
-git tag v1
+git tag -d v2
+git push origin :refs/tags/v2
+git tag v2
 git push --tags
 ```
 
