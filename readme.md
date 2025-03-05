@@ -80,7 +80,7 @@ The following inputs can be used as `step.with` keys:
 | Name                 | Required/Default | Description                                                  |
 |----------------------|------------------|--------------------------------------------------------------|
 | `helm-chart-version` | required         | The version of the Helm chart to pull                        |
-| `helm-registry-url`  | `ghcr.io`        | The URL of the Helm OCI registry                             |
+| `helm-registry-url`  | required         | The URL of the Helm OCI registry                             |
 | `helm-package`       | required         | The name of the Helm package to pull                         |
 | `helm-username`      | required         | The username for authenticating with the Helm registry       |
 | `helm-password`      | required         | The password for authenticating with the Helm registry       |

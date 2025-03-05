@@ -7,7 +7,7 @@ inputs:
     required: true
   helm-registry-url:
     description: "The Helm OCI registry URL"
-    default: "ghcr.io"
+    required: true
   helm-package:
     description: "The Helm package to pull"
     required: true
