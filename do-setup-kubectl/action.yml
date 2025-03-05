@@ -8,6 +8,11 @@ inputs:
   cluster-name:
     description: 'Kubernetes cluster name'
     required: true
+  helm-version:
+    description: 'Helm version'
+    required: false
+    default: '3.17.1'
+
 
 runs:
   using: "composite"
@@ -23,3 +28,5 @@ runs:
 
     - name: Setup Helm
       uses: azure/setup-helm@v4.2.0
+      with:
+        version: ${{ inputs.helm-version }}

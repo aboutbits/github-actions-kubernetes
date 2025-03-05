@@ -21,10 +21,11 @@ Setup Digital-Ocean CLI and configure Kubernetes.
 
 The following inputs can be used as `step.with` keys:
 
-| Name                     | Required/Default   | Description                     |
-|--------------------------|--------------------|---------------------------------|
-| `digital-ocean-token`    | required           | Digital Ocean access token      |
-| `cluster-name`           | required           | Kubernetes cluster name         |
+| Name                  | Required/Default | Description                            |
+|-----------------------|------------------|----------------------------------------|
+| `digital-ocean-token` | required         | DigitalOcean access token              |
+| `cluster-name`        | required         | Kubernetes cluster name                |
+| `helm-version`        | `3.17.1`         | The version of Helm to install and use |
 
 
 ### Deploy to Kubernetes using kubectl
@@ -54,17 +55,20 @@ The following inputs can be used as `step.with` keys:
 
 ### Deploy to Kubernetes using Helm
 
-Deploy an application to a Kubernetes cluster using its Helm diagram. Requires Kubernetes to be configured first.
+Deploy an application to a Kubernetes cluster using its Helm chart. Requires Kubernetes to be configured first.
 
 #### Example
 
 ```yaml
   - uses: aboutbits/github-actions-kubernetes/helm-deploy@v2
     with:
+      helm-chart-version: "1.0.0"
+      helm-package: "my-app-chart"
+      helm-username: ${{ secrets.HELM_USERNAME }}
+      helm-password: ${{ secrets.HELM_PASSWORD }}
       release-name: my-app
-      chart-directory: my-chart
-      image-tag: "1.0.0"
       values-file: environments/values-test.yaml
+      image-tag: "1.0.42"
       timeout: 5m
       working-directory: ./infrastructure
 ```
@@ -73,14 +77,19 @@ Deploy an application to a Kubernetes cluster using its Helm diagram. Requires K
 
 The following inputs can be used as `step.with` keys:
 
-| Name                | Required/Default | Description                        |
-|---------------------|------------------|------------------------------------|
-| `release-name`      | required         | The name of the Helm release       |
-| `values-file`       | required         | Path to the Helm values file       |
-| `working-directory` | `.`              | The working directory              |
-| `chart-directory`   | `.`              | Root directory of the helm diagram |
-| `image-tag`         | `latest`         | Tag of the container image         |
-| `timeout`           | `5m`             | Timeout for the Helm command       |
+| Name                 | Required/Default | Description                                                  |
+|----------------------|------------------|--------------------------------------------------------------|
+| `helm-chart-version` | required         | The version of the Helm chart to pull                        |
+| `helm-registry-url`  | required         | The URL of the Helm OCI registry                             |
+| `helm-package`       | required         | The name of the Helm package to pull                         |
+| `helm-username`      | required         | The username for authenticating with the Helm registry       |
+| `helm-password`      | required         | The password for authenticating with the Helm registry       |
+| `helm-protocol`      | `oci://`         | The protocol for pulling Helm charts (e.g., `oci://`)        |
+| `release-name`       | required         | The name of the Helm release                                 |
+| `values-file`        | required         | Path to the Helm values file for customization               |
+| `image-tag`          | `latest`         | The tag of the container image to set                        |
+| `timeout`            | `5m`             | The timeout for the Helm command                             |
+| `working-directory`  | `.`              | The working directory where the action commands will operate |
 
 ## Versioning
 
