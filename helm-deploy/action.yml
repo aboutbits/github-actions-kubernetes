@@ -3,13 +3,13 @@ description: "Setup a Helm chart, modify its appVersion, and deploy it to a Kube
 
 inputs:
   helm-chart-version:
-    description: "The Helm chart version to pull"
+    description: "The Helm chart version"
     required: true
   helm-registry-url:
     description: "The Helm OCI registry URL"
     required: true
   helm-package:
-    description: "The Helm package to pull"
+    description: "The Helm package"
     required: true
   helm-username:
     description: "The username to authenticate with the Helm registry"

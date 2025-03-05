@@ -9,7 +9,7 @@ inputs:
     description: 'Kubernetes cluster name'
     required: true
   helm-version:
-    description: 'Helm version to install'
+    description: 'Helm version'
     required: false
     default: '3.17.1'
 
