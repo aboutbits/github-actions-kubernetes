@@ -77,19 +77,20 @@ Deploy an application to a Kubernetes cluster using its Helm chart. Requires Kub
 
 The following inputs can be used as `step.with` keys:
 
-| Name                 | Required/Default | Description                                                  |
-|----------------------|------------------|--------------------------------------------------------------|
-| `helm-chart-version` | required         | The version of the Helm chart to pull                        |
-| `helm-registry-url`  | required         | The URL of the Helm OCI registry                             |
-| `helm-package`       | required         | The name of the Helm package to pull                         |
-| `helm-username`      | required         | The username for authenticating with the Helm registry       |
-| `helm-password`      | required         | The password for authenticating with the Helm registry       |
-| `helm-protocol`      | `oci://`         | The protocol for pulling Helm charts (e.g., `oci://`)        |
-| `release-name`       | required         | The name of the Helm release                                 |
-| `values-file`        | required         | Path to the Helm values file for customization               |
-| `image-tag`          | `latest`         | The tag of the container image to set                        |
-| `timeout`            | `5m`             | The timeout for the Helm command                             |
-| `working-directory`  | `.`              | The working directory where the action commands will operate |
+| Name                 | Required/Default | Description                                                      |
+|----------------------|------------------|------------------------------------------------------------------|
+| `helm-chart-version` | required         | The version of the Helm chart to pull                            |
+| `helm-registry-url`  | required         | The URL of the Helm OCI registry                                 |
+| `helm-package`       | required         | The name of the Helm package to pull                             |
+| `helm-username`      | required         | The username for authenticating with the Helm registry           |
+| `helm-password`      | required         | The password for authenticating with the Helm registry           |
+| `helm-protocol`      | `oci://`         | The protocol for pulling Helm charts (e.g., `oci://`)            |
+| `release-name`       | required         | The name of the Helm release                                     |
+| `namespace`          | required         | The namespace in which to deploy the Helm chart and application. |
+| `values-file`        | required         | Path to the Helm values file for customization                   |
+| `image-tag`          | `latest`         | The tag of the container image to set                            |
+| `timeout`            | `5m`             | The timeout for the Helm command                                 |
+| `working-directory`  | `.`              | The working directory where the action commands will operate     |
 
 ## Versioning
 
