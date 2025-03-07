@@ -74,7 +74,7 @@ runs:
       working-directory: ${{ inputs.working-directory }}
       run: |
         helm upgrade --wait --install ${{ inputs.release-name }} ./${{ inputs.helm-package }} \
-          --namespace ${{ inputs.namespace }}
+          --namespace ${{ inputs.namespace }} \
           --values ${{ inputs.values-file }} \
           --atomic --timeout ${{ inputs.timeout }} \
           --set image.tag=${{ inputs.image-tag }}
