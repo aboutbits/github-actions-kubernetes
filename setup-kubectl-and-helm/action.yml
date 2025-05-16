@@ -8,11 +8,11 @@ inputs:
   kubectl-version:
     description: 'kubectl version'
     required: false
-    default: 'latest'
+    default: '1.33.1'
   helm-version:
     description: 'Helm version'
     required: false
-    default: 'latest'
+    default: '3.17.3'
 
 runs:
   using: "composite"
