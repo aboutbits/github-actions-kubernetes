@@ -27,6 +27,7 @@ runs:
         mkdir -p ~/.kube
         echo "${{ inputs.kubeconfig }}" > ~/.kube/config
         chmod 600 ~/.kube/config
+      shell: bash
 
     - name: Setup Helm
       uses: azure/setup-helm@v4
