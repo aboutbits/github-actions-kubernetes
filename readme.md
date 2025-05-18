@@ -23,8 +23,8 @@ The following inputs can be used as `step.with` keys:
 | Name           | Required/Default | Description                 |
 |----------------|------------------|-----------------------------|
 | `kubeconfig`   | required         | The kubeconfig file content |
-| `kube-version` | `1.33.1`         | The version of kubectl      |
-| `helm-version` | `3.17.3`         | The version of Helm         |
+| `kube-version` | `v1.33.1`        | The version of kubectl      |
+| `helm-version` | `v3.17.3`        | The version of Helm         |
 
 ### Deploy to Kubernetes using kubectl
 
