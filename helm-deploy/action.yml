@@ -75,6 +75,8 @@ runs:
       run: |
         helm upgrade --wait --install ${{ inputs.release-name }} ./${{ inputs.helm-package }} \
           --namespace ${{ inputs.namespace }} \
+          --history-max 10 \
+          --storage-type configmaps \
           --values ${{ inputs.values-file }} \
           --atomic --timeout ${{ inputs.timeout }} \
           --set image.tag=${{ inputs.image-tag }}

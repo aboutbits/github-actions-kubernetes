@@ -97,16 +97,16 @@ In order to have a versioning in place and working, create lightweight tags that
 Creating a new minor release:
 
 ```bash
-git tag v3
+git tag v4
 git push --tags
 ```
 
 Replacing an already existing minor release:
 
 ```bash
-git tag -d v3
-git push origin :refs/tags/v3
-git tag v3
+git tag -d v4
+git push origin :refs/tags/v4
+git tag v4
 git push --tags
 ```
 
