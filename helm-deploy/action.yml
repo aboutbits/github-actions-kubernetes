@@ -82,22 +82,34 @@ runs:
       run: |
         SET_FILE_ARGS=""
         
+        echo "${{ inputs.grafana-dashboards-folder }}"
+        
         if [[ -d "${{ inputs.grafana-dashboards-folder }}" ]] && [[ "$(ls -A "${{ inputs.grafana-dashboards-folder }}")" ]]; then
+          echo "Found Grafana dashboards"
           i=0
           for f in "${{ inputs.grafana-dashboards-folder }}"/*; do
+            echo "Grafana dashboard file: $f"
             if [[ -f "$f" ]]; then
+              echo "Grafana dashboard file: $f adding"
               SET_FILE_ARGS+=" --set-file grafana.dashboards[$i]=$f"
               ((i++))
+              echo "Grafana dashboard file: $f added"
             fi
           done
         fi
         
+        echo "${{ inputs.grafana-alerts-folder }}"
+        
         if [[ -d "${{ inputs.grafana-alerts-folder }}" ]] && [[ "$(ls -A "${{ inputs.grafana-alerts-folder }}")" ]]; then
+          echo "Found Grafana alerts"
           i=0
           for f in "${{ inputs.grafana-alerts-folder }}"/*; do
+            echo "Grafana alert file: $f"
             if [[ -f "$f" ]]; then
+              echo "Grafana alert file: $f adding"
               SET_FILE_ARGS+=" --set-file grafana.alerts[$i]=$f"
               ((i++))
+              echo "Grafana alert file: $f added"
             fi
           done
         fi
