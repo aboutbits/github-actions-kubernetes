@@ -113,7 +113,7 @@ runs:
         helm upgrade --wait --install ${{ inputs.release-name }} ./${{ inputs.helm-package }} \
           --history-max 10 \
           --atomic --timeout ${{ inputs.timeout }} \
-          --set image.tag=${{ inputs.image-tag }}
+          --set image.tag=${{ inputs.image-tag }} \
           --namespace ${{ inputs.namespace }} \
           --values ${{ inputs.values-file }} \
           ${{ steps.grafana-files.outputs.set-file-args }}
