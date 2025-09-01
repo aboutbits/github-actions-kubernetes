@@ -22,12 +22,10 @@ runs:
       working-directory: ${{ inputs.working-directory }}
       run: kubectl apply -f ${{ inputs.deployment-file }}
       shell: bash
-
     - name: Verify deployment
       id: verify
       run: kubectl rollout status -n ${{ inputs.namespace-name }} deployment/${{ inputs.deployment-name }}
       shell: bash
-
     - name: Undo deployment if failed
       if: ${{ failure() && steps.verify.conclusion == 'failure' }}
       run: kubectl rollout undo -n ${{ inputs.namespace-name }} deployment/${{ inputs.deployment-name }}

@@ -49,35 +49,30 @@ runs:
   using: "composite"
   steps:
     - name: Login to Helm registry
-      shell: bash
       run: |
         helm registry login ${{ inputs.helm-registry-url }} \
           -u ${{ inputs.helm-username }} \
           -p ${{ inputs.helm-password }}
-
-    - name: Pull the Helm chart
       shell: bash
+    - name: Pull the Helm chart
       working-directory: ${{ inputs.working-directory }}
       run: |
         helm pull ${{ inputs.helm-protocol }}${{ inputs.helm-registry-url }}/${{ inputs.helm-package }} \
           --version ${{ inputs.helm-chart-version }}
-
-    - name: Extract Helm chart
       shell: bash
+    - name: Extract Helm chart
       working-directory: ${{ inputs.working-directory }}
       run: |
         tar -xzf ${{ inputs.helm-package }}-*.tgz
-
-    - name: Update appVersion in Chart.yaml
       shell: bash
+    - name: Update appVersion in Chart.yaml
       working-directory: ${{ inputs.working-directory }}
       run: |
         yq -i '.appVersion = "${{ github.sha }}" | .appVersion style="double"' \
           ${{ inputs.helm-package }}/Chart.yaml
-
+      shell: bash
     - name: Collect Grafana dashboards and alerts
       id: grafana-files
-      shell: bash
       working-directory: ${{ inputs.working-directory }}
       run: |
         SET_FILE_ARGS=""
@@ -103,9 +98,8 @@ runs:
         fi
         
         echo "set-file-args=$SET_FILE_ARGS" >> $GITHUB_OUTPUT
-
-    - name: Deploy Helm chart
       shell: bash
+    - name: Deploy Helm chart
       working-directory: ${{ inputs.working-directory }}
       env:
         HELM_DRIVER: configmaps
@@ -117,3 +111,4 @@ runs:
           --namespace ${{ inputs.namespace }} \
           --values ${{ inputs.values-file }} \
           ${{ steps.grafana-files.outputs.set-file-args }}
+      shell: bash
