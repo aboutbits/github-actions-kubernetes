@@ -1,15 +1,15 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: JOB_NAME_PLACEHOLDER
+  name: ${JOB_NAME}
 spec:
   ttlSecondsAfterFinished: 60
   template:
     spec:
       restartPolicy: Never
       containers:
-        - name: prepare-schema-preview
-          image: postgres:18
+        - name: prepare-preview-schema
+          image: ${POSTGRES_IMAGE}
           command: [ "bash", "-c" ]
           args:
             - |
@@ -25,7 +25,7 @@ spec:
               fi
 
               echo "Dumping schema $PGSCHEMA..."
-              pg_dump --schema=main \
+              pg_dump --schema=${BASE_SCHEMA} \
                       --no-comments \
                       --no-owner \
                       --no-acl \
@@ -35,7 +35,7 @@ spec:
               
               echo "Modifying dump file..."
               sed -i preview-dump.sql \
-                  -e "s/\"main\"/\"preview_$PREVIEW_NUMBER\"/g" \
+                  -e "s/\"${BASE_SCHEMA}\"/\"preview_$PREVIEW_NUMBER\"/g" \
                   -e 's/SET /--SET /g' \
                   -e 's/SELECT pg_catalog/--SELECT pg_catalog/g' \
                   -e 's/--SELECT pg_catalog.setval/SELECT pg_catalog.setval/g'
@@ -54,32 +54,32 @@ spec:
             - name: PGHOST
               valueFrom:
                 configMapKeyRef:
-                  name: CONFIGMAP_NAME_PLACEHOLDER
+                  name: ${CONFIGMAP_NAME}
                   key: DB_HOST
             - name: PGPORT
               valueFrom:
                 configMapKeyRef:
-                  name: CONFIGMAP_NAME_PLACEHOLDER
+                  name: ${CONFIGMAP_NAME}
                   key: DB_PORT
             - name: PGDATABASE
               valueFrom:
                 configMapKeyRef:
-                  name: CONFIGMAP_NAME_PLACEHOLDER
+                  name: ${CONFIGMAP_NAME}
                   key: DB_NAME
             - name: PGSCHEMA
               valueFrom:
                 configMapKeyRef:
-                  name: CONFIGMAP_NAME_PLACEHOLDER
+                  name: ${CONFIGMAP_NAME}
                   key: DB_SCHEMA
             - name: PGUSER
               valueFrom:
                 configMapKeyRef:
-                  name: CONFIGMAP_NAME_PLACEHOLDER
+                  name: ${CONFIGMAP_NAME}
                   key: DB_USERNAME
             - name: PGPASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: SECRET_NAME_PLACEHOLDER
+                  name: ${SECRET_NAME}
                   key: DB_PASSWORD
             - name: PREVIEW_NUMBER
-              value: "PREVIEW_NUMBER_PLACEHOLDER"
+              value: "${PREVIEW_NUMBER}"
