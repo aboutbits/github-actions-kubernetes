@@ -1,0 +1,60 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: JOB_NAME_PLACEHOLDER
+spec:
+  ttlSecondsAfterFinished: 60
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: drop-preview-schema
+          image: postgres:18
+          command: [ "bash", "-c" ]
+          args:
+            - |
+              set -e
+              
+              echo "### START $(date --iso-8601=seconds) ###"
+              echo "Drop schema preview_$PREVIEW_NUMBER..."
+              psql --echo-queries \
+                   --echo-errors \
+                   --single-transaction \
+                   --set=ON_ERROR_STOP=1 \
+                   --command="drop schema if exists preview_$PREVIEW_NUMBER cascade;"
+              
+              echo "Script finished successfully!"
+              echo "### END $(date --iso-8601=seconds) ###"
+          env:
+            - name: PGHOST
+              valueFrom:
+                configMapKeyRef:
+                  name: CONFIGMAP_NAME_PLACEHOLDER
+                  key: DB_HOST
+            - name: PGPORT
+              valueFrom:
+                configMapKeyRef:
+                  name: CONFIGMAP_NAME_PLACEHOLDER
+                  key: DB_PORT
+            - name: PGDATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: CONFIGMAP_NAME_PLACEHOLDER
+                  key: DB_NAME
+            - name: PGSCHEMA
+              valueFrom:
+                configMapKeyRef:
+                  name: CONFIGMAP_NAME_PLACEHOLDER
+                  key: DB_SCHEMA
+            - name: PGUSER
+              valueFrom:
+                configMapKeyRef:
+                  name: CONFIGMAP_NAME_PLACEHOLDER
+                  key: DB_USERNAME
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: SECRET_NAME_PLACEHOLDER
+                  key: DB_PASSWORD
+            - name: PREVIEW_NUMBER
+              value: "PREVIEW_NUMBER_PLACEHOLDER"
