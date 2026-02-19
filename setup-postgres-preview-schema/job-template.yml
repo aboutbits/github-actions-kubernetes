@@ -1,0 +1,85 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: JOB_NAME_PLACEHOLDER
+spec:
+  ttlSecondsAfterFinished: 60
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: prepare-schema-preview
+          image: postgres:18
+          command: [ "bash", "-c" ]
+          args:
+            - |
+              set -e
+              
+              echo "### START $(date --iso-8601=seconds) ###"
+              
+              if psql -t -A -c "SELECT 1 FROM information_schema.schemata WHERE schema_name = 'preview_$PREVIEW_NUMBER'" | grep -q 1; then
+                echo "Schema preview_$PREVIEW_NUMBER already exists. Skipping setup."
+                echo "Script finished successfully!"
+                echo "### END $(date --iso-8601=seconds) ###"
+                exit 0
+              fi
+
+              echo "Dumping schema $PGSCHEMA..."
+              pg_dump --schema=main \
+                      --no-comments \
+                      --no-owner \
+                      --no-acl \
+                      --quote-all-identifiers \
+                      --format=plain \
+                      --file=preview-dump.sql
+              
+              echo "Modifying dump file..."
+              sed -i preview-dump.sql \
+                  -e "s/\"main\"/\"preview_$PREVIEW_NUMBER\"/g" \
+                  -e 's/SET /--SET /g' \
+                  -e 's/SELECT pg_catalog/--SELECT pg_catalog/g' \
+                  -e 's/--SELECT pg_catalog.setval/SELECT pg_catalog.setval/g'
+              
+              echo "Creating schema preview_$PREVIEW_NUMBER with modified dump file..."
+              psql --echo-queries \
+                   --echo-errors \
+                   --single-transaction \
+                   --set=ON_ERROR_STOP=1 \
+                   --set=SESSION_REPLICATION_ROLE=replica \
+                   --file=preview-dump.sql
+              
+              echo "Script finished successfully!"
+              echo "### END $(date --iso-8601=seconds) ###"
+          env:
+            - name: PGHOST
+              valueFrom:
+                configMapKeyRef:
+                  name: CONFIGMAP_NAME_PLACEHOLDER
+                  key: DB_HOST
+            - name: PGPORT
+              valueFrom:
+                configMapKeyRef:
+                  name: CONFIGMAP_NAME_PLACEHOLDER
+                  key: DB_PORT
+            - name: PGDATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: CONFIGMAP_NAME_PLACEHOLDER
+                  key: DB_NAME
+            - name: PGSCHEMA
+              valueFrom:
+                configMapKeyRef:
+                  name: CONFIGMAP_NAME_PLACEHOLDER
+                  key: DB_SCHEMA
+            - name: PGUSER
+              valueFrom:
+                configMapKeyRef:
+                  name: CONFIGMAP_NAME_PLACEHOLDER
+                  key: DB_USERNAME
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: SECRET_NAME_PLACEHOLDER
+                  key: DB_PASSWORD
+            - name: PREVIEW_NUMBER
+              value: "PREVIEW_NUMBER_PLACEHOLDER"
