@@ -2,6 +2,9 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: ${JOB_NAME}
+  labels:
+    app.kubernetes.io/managed-by: github-actions
+    app.kubernetes.io/component: database-schema-setup
 spec:
   ttlSecondsAfterFinished: 60
   template:
@@ -17,14 +20,14 @@ spec:
               
               echo "### START $(date --iso-8601=seconds) ###"
               
-              if psql -t -A -c "SELECT 1 FROM information_schema.schemata WHERE schema_name = 'preview_$PREVIEW_NUMBER'" | grep -q 1; then
-                echo "Schema preview_$PREVIEW_NUMBER already exists. Skipping setup."
+              if psql -t -A -c "SELECT 1 FROM information_schema.schemata WHERE schema_name = '${PREVIEW_SCHEMA_NAME}'" | grep -q 1; then
+                echo "Schema ${PREVIEW_SCHEMA_NAME} already exists. Skipping setup."
                 echo "Script finished successfully!"
                 echo "### END $(date --iso-8601=seconds) ###"
                 exit 0
               fi
 
-              echo "Dumping schema $PGSCHEMA..."
+              echo "Dumping base schema ${BASE_SCHEMA}..."
               pg_dump --schema=${BASE_SCHEMA} \
                       --no-comments \
                       --no-owner \
@@ -35,12 +38,12 @@ spec:
               
               echo "Modifying dump file..."
               sed -i preview-dump.sql \
-                  -e "s/\"${BASE_SCHEMA}\"/\"preview_$PREVIEW_NUMBER\"/g" \
+                  -e "s/\"${BASE_SCHEMA}\"/\"${PREVIEW_SCHEMA_NAME}\"/g" \
                   -e 's/SET /--SET /g' \
                   -e 's/SELECT pg_catalog/--SELECT pg_catalog/g' \
                   -e 's/--SELECT pg_catalog.setval/SELECT pg_catalog.setval/g'
               
-              echo "Creating schema preview_$PREVIEW_NUMBER with modified dump file..."
+              echo "Creating schema ${PREVIEW_SCHEMA_NAME} with modified dump file..."
               psql --echo-queries \
                    --echo-errors \
                    --single-transaction \
@@ -81,5 +84,3 @@ spec:
                 secretKeyRef:
                   name: ${SECRET_NAME}
                   key: DB_PASSWORD
-            - name: PREVIEW_NUMBER
-              value: "${PREVIEW_NUMBER}"

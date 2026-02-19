@@ -27,19 +27,19 @@ runs:
   using: "composite"
   steps:
     - name: Prepare setup-schema job
+      env:
+        JOB_NAME: "prepare-schema-preview-${{ inputs.preview-number }}"
+        CONFIGMAP_NAME: "${{ inputs.deployment-name }}-environments"
+        SECRET_NAME: "${{ inputs.secret-name }}"
+        PREVIEW_SCHEMA_NAME: "preview_${{ inputs.preview-number }}"
+        POSTGRES_IMAGE: "${{ inputs.postgres-image }}"
+        BASE_SCHEMA: "${{ inputs.base-schema }}"
       run: |
-        export JOB_NAME="prepare-schema-preview-${{ inputs.preview-number }}"
-        export CONFIGMAP_NAME="${{ inputs.deployment-name }}-environments"
-        export SECRET_NAME="${{ inputs.secret-name }}"
-        export PREVIEW_NUMBER="${{ inputs.preview-number }}"
-        export POSTGRES_IMAGE="${{ inputs.postgres-image }}"
-        export BASE_SCHEMA="${{ inputs.base-schema }}"
-
         envsubst '
           $JOB_NAME
           $CONFIGMAP_NAME
           $SECRET_NAME
-          $PREVIEW_NUMBER
+          $PREVIEW_SCHEMA_NAME
           $POSTGRES_IMAGE
           $BASE_SCHEMA
         ' < ${{ github.action_path }}/job-template.yml > job-setup-schema.yml
@@ -53,10 +53,10 @@ runs:
       shell: bash
 
     - name: Wait for setup-schema job to complete
+      env:
+        JOB_NAME: "prepare-schema-preview-${{ inputs.preview-number }}"
+        NAMESPACE: "${{ inputs.namespace }}"
       run: |
-        JOB_NAME="prepare-schema-preview-${{ inputs.preview-number }}"
-        NAMESPACE="${{ inputs.namespace }}"
-        
         echo "Waiting for job $JOB_NAME in namespace $NAMESPACE..."
         
         if kubectl wait --namespace $NAMESPACE --for=condition=complete --timeout=60s job/$JOB_NAME; then
