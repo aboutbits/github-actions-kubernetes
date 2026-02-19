@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: JOB_NAME_PLACEHOLDER
+  name: ${JOB_NAME}
 spec:
   ttlSecondsAfterFinished: 60
   template:
@@ -9,7 +9,7 @@ spec:
       restartPolicy: Never
       containers:
         - name: drop-preview-schema
-          image: postgres:18
+          image: ${POSTGRES_IMAGE}
           command: [ "bash", "-c" ]
           args:
             - |
@@ -29,32 +29,32 @@ spec:
             - name: PGHOST
               valueFrom:
                 configMapKeyRef:
-                  name: CONFIGMAP_NAME_PLACEHOLDER
+                  name: ${CONFIGMAP_NAME}
                   key: DB_HOST
             - name: PGPORT
               valueFrom:
                 configMapKeyRef:
-                  name: CONFIGMAP_NAME_PLACEHOLDER
+                  name: ${CONFIGMAP_NAME}
                   key: DB_PORT
             - name: PGDATABASE
               valueFrom:
                 configMapKeyRef:
-                  name: CONFIGMAP_NAME_PLACEHOLDER
+                  name: ${CONFIGMAP_NAME}
                   key: DB_NAME
             - name: PGSCHEMA
               valueFrom:
                 configMapKeyRef:
-                  name: CONFIGMAP_NAME_PLACEHOLDER
+                  name: ${CONFIGMAP_NAME}
                   key: DB_SCHEMA
             - name: PGUSER
               valueFrom:
                 configMapKeyRef:
-                  name: CONFIGMAP_NAME_PLACEHOLDER
+                  name: ${CONFIGMAP_NAME}
                   key: DB_USERNAME
             - name: PGPASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: SECRET_NAME_PLACEHOLDER
+                  name: ${SECRET_NAME}
                   key: DB_PASSWORD
             - name: PREVIEW_NUMBER
-              value: "PREVIEW_NUMBER_PLACEHOLDER"
+              value: "${PREVIEW_NUMBER}"

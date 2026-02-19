@@ -14,24 +14,24 @@ inputs:
     description: 'Name of the secret containing DB password'
     required: false
     default: 'app-secrets'
+  postgres-image:
+    description: 'PostgreSQL image to use'
+    required: false
+    default: 'postgres:18'
 
 runs:
   using: "composite"
   steps:
     - name: Prepare teardown-schema job
       run: |
-        JOB_NAME="drop-schema-preview-${{ inputs.preview-number }}"
-        CONFIGMAP_NAME="${{ inputs.deployment-name }}-environments"
-        
-        # Create a temporary file for the manifest
-        cp ${{ github.action_path }}/job-template.yml job-teardown-schema.yml
-        
-        # Replace placeholders
-        sed -i "s/JOB_NAME_PLACEHOLDER/$JOB_NAME/g" job-teardown-schema.yml
-        sed -i "s/CONFIGMAP_NAME_PLACEHOLDER/$CONFIGMAP_NAME/g" job-teardown-schema.yml
-        sed -i "s/SECRET_NAME_PLACEHOLDER/${{ inputs.secret-name }}/g" job-teardown-schema.yml
-        sed -i "s/PREVIEW_NUMBER_PLACEHOLDER/${{ inputs.preview-number }}/g" job-teardown-schema.yml
-        
+        export JOB_NAME="drop-schema-preview-${{ inputs.preview-number }}"
+        export CONFIGMAP_NAME="${{ inputs.deployment-name }}-environments"
+        export SECRET_NAME="${{ inputs.secret-name }}"
+        export PREVIEW_NUMBER="${{ inputs.preview-number }}"
+        export POSTGRES_IMAGE="${{ inputs.postgres-image }}"
+
+        envsubst '$JOB_NAME $CONFIGMAP_NAME $SECRET_NAME $PREVIEW_NUMBER $POSTGRES_IMAGE' < ${{ github.action_path }}/job-template.yml > job-teardown-schema.yml
+
         echo "Prepared job manifest: job-teardown-schema.yml"
       shell: bash
 
