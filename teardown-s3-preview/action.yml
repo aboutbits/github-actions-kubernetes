@@ -1,0 +1,62 @@
+name: 'Teardown S3 Preview'
+description: 'Deletes the S3 preview prefix'
+inputs:
+  deployment-name:
+    description: 'Name of the deployment (used for ConfigMap name)'
+    required: true
+  namespace:
+    description: 'Kubernetes namespace'
+    required: true
+  preview-number:
+    description: 'Preview number (PR number)'
+    required: true
+  secret-name:
+    description: 'Name of the secret containing AWS credentials'
+    required: false
+    default: 'app-secrets'
+
+runs:
+  using: "composite"
+  steps:
+    - name: Prepare teardown-s3 job
+      run: |
+        JOB_NAME="teardown-s3-preview-${{ inputs.preview-number }}"
+        CONFIGMAP_NAME="${{ inputs.deployment-name }}-environments"
+        
+        # Create a temporary file for the manifest
+        cp ${{ github.action_path }}/job-template.yml job-teardown-s3.yml
+        
+        # Replace placeholders
+        sed -i "s/JOB_NAME_PLACEHOLDER/$JOB_NAME/g" job-teardown-s3.yml
+        sed -i "s/CONFIGMAP_NAME_PLACEHOLDER/$CONFIGMAP_NAME/g" job-teardown-s3.yml
+        sed -i "s/SECRET_NAME_PLACEHOLDER/${{ inputs.secret-name }}/g" job-teardown-s3.yml
+        sed -i "s/PREVIEW_NUMBER_PLACEHOLDER/${{ inputs.preview-number }}/g" job-teardown-s3.yml
+        
+        echo "Prepared job manifest: job-teardown-s3.yml"
+      shell: bash
+
+    - name: Create teardown-s3 job
+      run: |
+        kubectl apply --namespace ${{ inputs.namespace }} -f job-teardown-s3.yml
+      shell: bash
+
+    - name: Wait for teardown-s3 job to complete
+      run: |
+        JOB_NAME="teardown-s3-preview-${{ inputs.preview-number }}"
+        NAMESPACE="${{ inputs.namespace }}"
+        
+        echo "Waiting for job $JOB_NAME in namespace $NAMESPACE..."
+        
+        if kubectl wait --namespace $NAMESPACE --for=condition=complete --timeout=5m job/$JOB_NAME; then
+          echo "Job finished with status: Complete"
+          kubectl logs job/$JOB_NAME --namespace $NAMESPACE
+        elif kubectl wait --namespace $NAMESPACE --for=condition=failed --timeout=1s job/$JOB_NAME; then
+          echo "Job finished with status: Failed"
+          kubectl logs job/$JOB_NAME --namespace $NAMESPACE
+          exit 1
+        else
+          echo "Timeout waiting for job to complete."
+          kubectl logs job/$JOB_NAME --namespace $NAMESPACE || true
+          exit 1
+        fi
+      shell: bash
