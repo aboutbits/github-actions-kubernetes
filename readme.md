@@ -92,7 +92,7 @@ The following inputs can be used as `step.with` keys:
 
 ### Setup PostgreSQL Preview Schema
 
-Sets up a PostgreSQL preview schema by cloning the main schema.
+Sets up a PostgreSQL preview schema by cloning a base schema.
 
 #### Example
 
@@ -114,6 +114,8 @@ The following inputs can be used as `step.with` keys:
 | `namespace`       | required         | Kubernetes namespace                       |
 | `preview-number`  | required         | Preview number (PR number)                 |
 | `secret-name`     | `app-secrets`    | Name of the secret containing PostgreSQL password |
+| `postgres-image`  | `postgres:18`    | PostgreSQL image to use                    |
+| `base-schema`     | `main`           | Base schema to copy from                   |
 
 ### Teardown PostgreSQL Preview Schema
 
@@ -139,6 +141,7 @@ The following inputs can be used as `step.with` keys:
 | `namespace`       | required         | Kubernetes namespace                       |
 | `preview-number`  | required         | Preview number (PR number)                 |
 | `secret-name`     | `app-secrets`    | Name of the secret containing PostgreSQL password |
+| `postgres-image`  | `postgres:18`    | PostgreSQL image to use                    |
 
 ## Build & Publish
 
