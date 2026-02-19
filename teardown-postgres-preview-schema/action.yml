@@ -30,7 +30,13 @@ runs:
         export PREVIEW_NUMBER="${{ inputs.preview-number }}"
         export POSTGRES_IMAGE="${{ inputs.postgres-image }}"
 
-        envsubst '$JOB_NAME $CONFIGMAP_NAME $SECRET_NAME $PREVIEW_NUMBER $POSTGRES_IMAGE' < ${{ github.action_path }}/job-template.yml > job-teardown-schema.yml
+        envsubst '
+          $JOB_NAME
+          $CONFIGMAP_NAME
+          $SECRET_NAME
+          $PREVIEW_NUMBER
+          $POSTGRES_IMAGE
+        ' < ${{ github.action_path }}/job-template.yml > job-teardown-schema.yml
 
         echo "Prepared job manifest: job-teardown-schema.yml"
       shell: bash

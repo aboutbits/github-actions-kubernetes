@@ -35,7 +35,14 @@ runs:
         export POSTGRES_IMAGE="${{ inputs.postgres-image }}"
         export BASE_SCHEMA="${{ inputs.base-schema }}"
 
-        envsubst '$JOB_NAME $CONFIGMAP_NAME $SECRET_NAME $PREVIEW_NUMBER $POSTGRES_IMAGE $BASE_SCHEMA' < ${{ github.action_path }}/job-template.yml > job-setup-schema.yml
+        envsubst '
+          $JOB_NAME
+          $CONFIGMAP_NAME
+          $SECRET_NAME
+          $PREVIEW_NUMBER
+          $POSTGRES_IMAGE
+          $BASE_SCHEMA
+        ' < ${{ github.action_path }}/job-template.yml > job-setup-schema.yml
 
         echo "Prepared job manifest: job-setup-schema.yml"
       shell: bash
