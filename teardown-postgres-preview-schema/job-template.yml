@@ -1,0 +1,61 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: ${JOB_NAME}
+  labels:
+    app.kubernetes.io/managed-by: github-actions
+    app.kubernetes.io/component: database-schema-teardown
+spec:
+  ttlSecondsAfterFinished: 60
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: drop-preview-schema
+          image: ${POSTGRES_IMAGE}
+          command: [ "bash", "-c" ]
+          args:
+            - |
+              set -e
+              
+              echo "### START $(date --iso-8601=seconds) ###"
+              echo "Drop schema ${PREVIEW_SCHEMA_NAME}..."
+              psql --echo-queries \
+                   --echo-errors \
+                   --single-transaction \
+                   --set=ON_ERROR_STOP=1 \
+                   --command="drop schema if exists ${PREVIEW_SCHEMA_NAME} cascade;"
+              
+              echo "Script finished successfully!"
+              echo "### END $(date --iso-8601=seconds) ###"
+          env:
+            - name: PGHOST
+              valueFrom:
+                configMapKeyRef:
+                  name: ${CONFIGMAP_NAME}
+                  key: DB_HOST
+            - name: PGPORT
+              valueFrom:
+                configMapKeyRef:
+                  name: ${CONFIGMAP_NAME}
+                  key: DB_PORT
+            - name: PGDATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: ${CONFIGMAP_NAME}
+                  key: DB_NAME
+            - name: PGSCHEMA
+              valueFrom:
+                configMapKeyRef:
+                  name: ${CONFIGMAP_NAME}
+                  key: DB_SCHEMA
+            - name: PGUSER
+              valueFrom:
+                configMapKeyRef:
+                  name: ${CONFIGMAP_NAME}
+                  key: DB_USERNAME
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: ${SECRET_NAME}
+                  key: DB_PASSWORD
