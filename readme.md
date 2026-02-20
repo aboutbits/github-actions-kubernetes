@@ -11,7 +11,7 @@ Setup kubectl and Helm using kubeconfig file.
 #### Example
 
 ```yaml
-  - uses: aboutbits/github-actions-kubernetes/setup-kubectl-and-helm@v3
+  - uses: aboutbits/github-actions-kubernetes/setup-kubectl-and-helm@v4
     with:
       kubeconfig: ${{ secrets.KUBECONFIG }}
 ```
@@ -33,7 +33,7 @@ Deploy application to a Kubernetes Cluster. Requires Kubernetes to be configured
 #### Example
 
 ```yaml
-  - uses: aboutbits/github-actions-kubernetes/kubectl-deploy@v3
+  - uses: aboutbits/github-actions-kubernetes/kubectl-deploy@v4
     with:
       deployment-file: 'infrastructure/kubernetes.prod.yml'
       namespace-name: ${{ env.NAMESPACE_NAME }}
@@ -58,7 +58,7 @@ Deploy an application to a Kubernetes cluster using its Helm chart. Requires Kub
 #### Example
 
 ```yaml
-  - uses: aboutbits/github-actions-kubernetes/helm-deploy@v3
+  - uses: aboutbits/github-actions-kubernetes/helm-deploy@v4
     with:
       helm-chart-version: "1.0.0"
       helm-package: "my-app-chart"
@@ -97,7 +97,7 @@ Sets up a PostgreSQL preview schema by cloning a base schema.
 #### Example
 
 ```yaml
-  - uses: aboutbits/github-actions-kubernetes/setup-postgres-preview-schema@v3
+  - uses: aboutbits/github-actions-kubernetes/setup-postgres-preview-schema@v4
     with:
       deployment-name: my-app
       namespace: my-namespace
@@ -124,7 +124,7 @@ Drops the PostgreSQL preview schema.
 #### Example
 
 ```yaml
-  - uses: aboutbits/github-actions-kubernetes/teardown-postgres-preview-schema@v3
+  - uses: aboutbits/github-actions-kubernetes/teardown-postgres-preview-schema@v4
     with:
       deployment-name: my-app
       namespace: my-namespace
