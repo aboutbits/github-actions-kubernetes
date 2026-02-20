@@ -90,6 +90,59 @@ The following inputs can be used as `step.with` keys:
 | `timeout`            | `5m`             | The timeout for the Helm command                                 |
 | `working-directory`  | `.`              | The working directory where the action commands will operate     |
 
+### Setup PostgreSQL Preview Schema
+
+Sets up a PostgreSQL preview schema by cloning a base schema.
+
+#### Example
+
+```yaml
+  - uses: aboutbits/github-actions-kubernetes/setup-postgres-preview-schema@v3
+    with:
+      deployment-name: my-app
+      namespace: my-namespace
+      preview-number: ${{ github.event.number }}
+```
+
+#### Inputs
+
+The following inputs can be used as `step.with` keys:
+
+| Name              | Required/Default | Description                                |
+|-------------------|------------------|--------------------------------------------|
+| `deployment-name` | required         | Name of the deployment                     |
+| `namespace`       | required         | Kubernetes namespace                       |
+| `preview-number`  | required         | Preview number (PR number)                 |
+| `secret-name`     | `app-secrets`    | Name of the secret containing PostgreSQL password |
+| `postgres-image`  | `postgres:18`    | PostgreSQL image to use                    |
+| `base-schema`     | `main`           | Base schema to copy from                   |
+
+### Teardown PostgreSQL Preview Schema
+
+Drops the PostgreSQL preview schema.
+
+#### Example
+
+```yaml
+  - uses: aboutbits/github-actions-kubernetes/teardown-postgres-preview-schema@v3
+    with:
+      deployment-name: my-app
+      namespace: my-namespace
+      preview-number: ${{ github.event.number }}
+```
+
+#### Inputs
+
+The following inputs can be used as `step.with` keys:
+
+| Name              | Required/Default | Description                                |
+|-------------------|------------------|--------------------------------------------|
+| `deployment-name` | required         | Name of the deployment                     |
+| `namespace`       | required         | Kubernetes namespace                       |
+| `preview-number`  | required         | Preview number (PR number)                 |
+| `secret-name`     | `app-secrets`    | Name of the secret containing PostgreSQL password |
+| `postgres-image`  | `postgres:18`    | PostgreSQL image to use                    |
+
 ## Build & Publish
 
 To build and publish the action, visit the GitHub Actions page of the repository and trigger the workflow "Release Package" manually.
