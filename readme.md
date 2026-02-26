@@ -99,7 +99,7 @@ Sets up a PostgreSQL preview schema by cloning a base schema.
 ```yaml
   - uses: aboutbits/github-actions-kubernetes/setup-postgres-preview-schema@v3
     with:
-      deployment-name: my-app
+      configmap-name: my-app-environments
       namespace: my-namespace
       preview-number: ${{ github.event.number }}
 ```
@@ -110,12 +110,18 @@ The following inputs can be used as `step.with` keys:
 
 | Name              | Required/Default | Description                                |
 |-------------------|------------------|--------------------------------------------|
-| `deployment-name` | required         | Name of the deployment                     |
+| `configmap-name`  | `app-spring-deployment-env` | Name of the ConfigMap           |
 | `namespace`       | required         | Kubernetes namespace                       |
 | `preview-number`  | required         | Preview number (PR number)                 |
 | `secret-name`     | `app-secrets`    | Name of the secret containing PostgreSQL password |
 | `postgres-image`  | `postgres:18`    | PostgreSQL image to use                    |
 | `base-schema`     | `main`           | Base schema to copy from                   |
+| `db-host-key`     | `DB_HOST`        | Key for DB_HOST in ConfigMap               |
+| `db-port-key`     | `DB_PORT`        | Key for DB_PORT in ConfigMap               |
+| `db-name-key`     | `DB_NAME`        | Key for DB_NAME in ConfigMap               |
+| `db-schema-key`   | `DB_SCHEMA`      | Key for DB_SCHEMA in ConfigMap             |
+| `db-username-key` | `DB_USERNAME`    | Key for DB_USERNAME in ConfigMap           |
+| `db-password-key` | `DB_PASSWORD`    | Key for DB_PASSWORD in Secret              |
 
 ### Teardown PostgreSQL Preview Schema
 
@@ -126,7 +132,7 @@ Drops the PostgreSQL preview schema.
 ```yaml
   - uses: aboutbits/github-actions-kubernetes/teardown-postgres-preview-schema@v3
     with:
-      deployment-name: my-app
+      configmap-name: my-app-environments
       namespace: my-namespace
       preview-number: ${{ github.event.number }}
 ```
@@ -137,11 +143,17 @@ The following inputs can be used as `step.with` keys:
 
 | Name              | Required/Default | Description                                |
 |-------------------|------------------|--------------------------------------------|
-| `deployment-name` | required         | Name of the deployment                     |
+| `configmap-name`  | `app-spring-deployment-env` | Name of the ConfigMap           |
 | `namespace`       | required         | Kubernetes namespace                       |
 | `preview-number`  | required         | Preview number (PR number)                 |
 | `secret-name`     | `app-secrets`    | Name of the secret containing PostgreSQL password |
 | `postgres-image`  | `postgres:18`    | PostgreSQL image to use                    |
+| `db-host-key`     | `DB_HOST`        | Key for DB_HOST in ConfigMap               |
+| `db-port-key`     | `DB_PORT`        | Key for DB_PORT in ConfigMap               |
+| `db-name-key`     | `DB_NAME`        | Key for DB_NAME in ConfigMap               |
+| `db-schema-key`   | `DB_SCHEMA`      | Key for DB_SCHEMA in ConfigMap             |
+| `db-username-key` | `DB_USERNAME`    | Key for DB_USERNAME in ConfigMap           |
+| `db-password-key` | `DB_PASSWORD`    | Key for DB_PASSWORD in Secret              |
 
 ## Build & Publish
 
