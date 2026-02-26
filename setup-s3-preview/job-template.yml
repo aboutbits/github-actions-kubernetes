@@ -1,7 +1,10 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: JOB_NAME_PLACEHOLDER
+  name: ${JOB_NAME}
+  labels:
+    app.kubernetes.io/managed-by: github-actions
+    app.kubernetes.io/component: s3-preview-setup
 spec:
   ttlSecondsAfterFinished: 60
   template:
@@ -22,8 +25,8 @@ spec:
                 S3_ARGS="--endpoint-url $S3_ENDPOINT"
               fi
               
-              S3_MAIN_PREFIX="s3://$S3_BUCKET/main/"
-              S3_PREVIEW_PREFIX="s3://$S3_BUCKET/preview-$PREVIEW_NUMBER/"
+              S3_MAIN_PREFIX="s3://$S3_BUCKET/${BASE_PREFIX}/"
+              S3_PREVIEW_PREFIX="s3://$S3_BUCKET/preview-${PREVIEW_NUMBER}/"
               
               echo "Checking if $S3_PREVIEW_PREFIX already exists..."
               if [ "$(aws s3 $S3_ARGS ls "$S3_PREVIEW_PREFIX" | wc -l)" -gt 0 ]; then
@@ -42,39 +45,39 @@ spec:
             - name: S3_BUCKET
               valueFrom:
                 configMapKeyRef:
-                  name: CONFIGMAP_NAME_PLACEHOLDER
-                  key: S3_BUCKET
+                  name: ${CONFIGMAP_NAME}
+                  key: ${S3_BUCKET_KEY}
             - name: S3_ENDPOINT
               valueFrom:
                 configMapKeyRef:
-                  name: CONFIGMAP_NAME_PLACEHOLDER
-                  key: S3_ENDPOINT
+                  name: ${CONFIGMAP_NAME}
+                  key: ${S3_ENDPOINT_KEY}
                   optional: true
             - name: AWS_REGION
               valueFrom:
                 configMapKeyRef:
-                  name: CONFIGMAP_NAME_PLACEHOLDER
-                  key: AWS_REGION
+                  name: ${CONFIGMAP_NAME}
+                  key: ${AWS_REGION_KEY}
             - name: AWS_DEFAULT_REGION
               valueFrom:
                 configMapKeyRef:
-                  name: CONFIGMAP_NAME_PLACEHOLDER
-                  key: AWS_REGION
+                  name: ${CONFIGMAP_NAME}
+                  key: ${AWS_REGION_KEY}
             - name: AWS_ACCESS_KEY_ID
               valueFrom:
                 secretKeyRef:
-                  name: SECRET_NAME_PLACEHOLDER
-                  key: AWS_ACCESS_KEY_ID
+                  name: ${SECRET_NAME}
+                  key: ${AWS_ACCESS_KEY_ID_KEY}
             - name: AWS_SECRET_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
-                  name: SECRET_NAME_PLACEHOLDER
-                  key: AWS_SECRET_ACCESS_KEY
+                  name: ${SECRET_NAME}
+                  key: ${AWS_SECRET_ACCESS_KEY_KEY}
             - name: AWS_SESSION_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: SECRET_NAME_PLACEHOLDER
-                  key: AWS_SESSION_TOKEN
+                  name: ${SECRET_NAME}
+                  key: ${AWS_SESSION_TOKEN_KEY}
                   optional: true
             - name: PREVIEW_NUMBER
-              value: "PREVIEW_NUMBER_PLACEHOLDER"
+              value: "${PREVIEW_NUMBER}"

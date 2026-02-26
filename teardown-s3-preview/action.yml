@@ -1,9 +1,10 @@
 name: 'Teardown S3 Preview'
 description: 'Deletes the S3 preview prefix'
 inputs:
-  deployment-name:
-    description: 'Name of the deployment (used for ConfigMap name)'
-    required: true
+  configmap-name:
+    description: 'Name of the ConfigMap'
+    required: false
+    default: 'app-spring-deployment-env'
   namespace:
     description: 'Kubernetes namespace'
     required: true
@@ -14,24 +15,60 @@ inputs:
     description: 'Name of the secret containing AWS credentials'
     required: false
     default: 'app-secrets'
+  s3-bucket-key:
+    description: 'Key for S3_BUCKET in ConfigMap'
+    required: false
+    default: 'S3_BUCKET'
+  s3-endpoint-key:
+    description: 'Key for S3_ENDPOINT in ConfigMap'
+    required: false
+    default: 'S3_ENDPOINT'
+  aws-region-key:
+    description: 'Key for AWS_REGION in ConfigMap'
+    required: false
+    default: 'AWS_REGION'
+  aws-access-key-id-key:
+    description: 'Key for AWS_ACCESS_KEY_ID in Secret'
+    required: false
+    default: 'AWS_ACCESS_KEY_ID'
+  aws-secret-access-key-key:
+    description: 'Key for AWS_SECRET_ACCESS_KEY in Secret'
+    required: false
+    default: 'AWS_SECRET_ACCESS_KEY'
+  aws-session-token-key:
+    description: 'Key for AWS_SESSION_TOKEN in Secret'
+    required: false
+    default: 'AWS_SESSION_TOKEN'
 
 runs:
   using: "composite"
   steps:
     - name: Prepare teardown-s3 job
+      env:
+        JOB_NAME: "teardown-s3-preview-${{ inputs.preview-number }}"
+        CONFIGMAP_NAME: "${{ inputs.configmap-name }}"
+        SECRET_NAME: "${{ inputs.secret-name }}"
+        S3_BUCKET_KEY: "${{ inputs.s3-bucket-key }}"
+        S3_ENDPOINT_KEY: "${{ inputs.s3-endpoint-key }}"
+        AWS_REGION_KEY: "${{ inputs.aws-region-key }}"
+        AWS_ACCESS_KEY_ID_KEY: "${{ inputs.aws-access-key-id-key }}"
+        AWS_SECRET_ACCESS_KEY_KEY: "${{ inputs.aws-secret-access-key-key }}"
+        AWS_SESSION_TOKEN_KEY: "${{ inputs.aws-session-token-key }}"
+        PREVIEW_NUMBER: "${{ inputs.preview-number }}"
       run: |
-        JOB_NAME="teardown-s3-preview-${{ inputs.preview-number }}"
-        CONFIGMAP_NAME="${{ inputs.deployment-name }}-environments"
-        
-        # Create a temporary file for the manifest
-        cp ${{ github.action_path }}/job-template.yml job-teardown-s3.yml
-        
-        # Replace placeholders
-        sed -i "s/JOB_NAME_PLACEHOLDER/$JOB_NAME/g" job-teardown-s3.yml
-        sed -i "s/CONFIGMAP_NAME_PLACEHOLDER/$CONFIGMAP_NAME/g" job-teardown-s3.yml
-        sed -i "s/SECRET_NAME_PLACEHOLDER/${{ inputs.secret-name }}/g" job-teardown-s3.yml
-        sed -i "s/PREVIEW_NUMBER_PLACEHOLDER/${{ inputs.preview-number }}/g" job-teardown-s3.yml
-        
+        envsubst '
+          $JOB_NAME
+          $CONFIGMAP_NAME
+          $SECRET_NAME
+          $S3_BUCKET_KEY
+          $S3_ENDPOINT_KEY
+          $AWS_REGION_KEY
+          $AWS_ACCESS_KEY_ID_KEY
+          $AWS_SECRET_ACCESS_KEY_KEY
+          $AWS_SESSION_TOKEN_KEY
+          $PREVIEW_NUMBER
+        ' < ${{ github.action_path }}/job-template.yml > job-teardown-s3.yml
+
         echo "Prepared job manifest: job-teardown-s3.yml"
       shell: bash
 
@@ -41,10 +78,10 @@ runs:
       shell: bash
 
     - name: Wait for teardown-s3 job to complete
+      env:
+        JOB_NAME: "teardown-s3-preview-${{ inputs.preview-number }}"
+        NAMESPACE: "${{ inputs.namespace }}"
       run: |
-        JOB_NAME="teardown-s3-preview-${{ inputs.preview-number }}"
-        NAMESPACE="${{ inputs.namespace }}"
-        
         echo "Waiting for job $JOB_NAME in namespace $NAMESPACE..."
         
         if kubectl wait --namespace $NAMESPACE --for=condition=complete --timeout=5m job/$JOB_NAME; then
