@@ -90,6 +90,69 @@ The following inputs can be used as `step.with` keys:
 | `timeout`            | `5m`             | The timeout for the Helm command                                 |
 | `working-directory`  | `.`              | The working directory where the action commands will operate     |
 
+### Setup S3 Preview
+
+Creates an S3 preview prefix by copying from the main prefix.
+
+#### Example
+
+```yaml
+  - uses: aboutbits/github-actions-kubernetes/setup-s3-preview@v3
+    with:
+      configmap-name: my-app-environments
+      namespace: my-namespace
+      preview-number: ${{ github.event.number }}
+```
+
+#### Inputs
+
+The following inputs can be used as `step.with` keys:
+
+| Name                        | Required/Default            | Description                                         |
+|-----------------------------|-----------------------------|-----------------------------------------------------|
+| `configmap-name`            | `app-spring-deployment-env` | Name of the ConfigMap                               |
+| `namespace`                 | required                    | Kubernetes namespace                                |
+| `preview-number`            | required                    | Preview number (PR number)                          |
+| `secret-name`               | `app-secrets`               | Name of the secret containing AWS credentials       |
+| `s3-bucket-key`             | `S3_BUCKET`                 | Key for S3_BUCKET in ConfigMap                      |
+| `s3-endpoint-key`           | `S3_ENDPOINT`               | Key for S3_ENDPOINT in ConfigMap                    |
+| `aws-region-key`            | `AWS_REGION`                | Key for AWS_REGION in ConfigMap                     |
+| `aws-access-key-id-key`     | `AWS_ACCESS_KEY_ID`         | Key for AWS_ACCESS_KEY_ID in Secret                 |
+| `aws-secret-access-key-key` | `AWS_SECRET_ACCESS_KEY`     | Key for AWS_SECRET_ACCESS_KEY in Secret             |
+| `aws-session-token-key`     | `AWS_SESSION_TOKEN`         | Key for AWS_SESSION_TOKEN in Secret                 |
+| `base-prefix`               | `main`                      | Base prefix to copy from                            |
+
+### Teardown S3 Preview
+
+Deletes the S3 preview prefix.
+
+#### Example
+
+```yaml
+  - uses: aboutbits/github-actions-kubernetes/teardown-s3-preview@v3
+    with:
+      configmap-name: my-app-environments
+      namespace: my-namespace
+      preview-number: ${{ github.event.number }}
+```
+
+#### Inputs
+
+The following inputs can be used as `step.with` keys:
+
+| Name                        | Required/Default            | Description                                         |
+|-----------------------------|-----------------------------|-----------------------------------------------------|
+| `configmap-name`            | `app-spring-deployment-env` | Name of the ConfigMap                               |
+| `namespace`                 | required                    | Kubernetes namespace                                |
+| `preview-number`            | required                    | Preview number (PR number)                          |
+| `secret-name`               | `app-secrets`               | Name of the secret containing AWS credentials       |
+| `s3-bucket-key`             | `S3_BUCKET`                 | Key for S3_BUCKET in ConfigMap                      |
+| `s3-endpoint-key`           | `S3_ENDPOINT`               | Key for S3_ENDPOINT in ConfigMap                    |
+| `aws-region-key`            | `AWS_REGION`                | Key for AWS_REGION in ConfigMap                     |
+| `aws-access-key-id-key`     | `AWS_ACCESS_KEY_ID`         | Key for AWS_ACCESS_KEY_ID in Secret                 |
+| `aws-secret-access-key-key` | `AWS_SECRET_ACCESS_KEY`     | Key for AWS_SECRET_ACCESS_KEY in Secret             |
+| `aws-session-token-key`     | `AWS_SESSION_TOKEN`         | Key for AWS_SESSION_TOKEN in Secret                 |
+
 ### Setup PostgreSQL Preview Schema
 
 Sets up a PostgreSQL preview schema by cloning a base schema.
