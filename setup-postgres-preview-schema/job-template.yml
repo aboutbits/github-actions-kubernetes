@@ -58,29 +58,29 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   name: ${CONFIGMAP_NAME}
-                  key: DB_HOST
+                  key: ${DB_HOST_KEY}
             - name: PGPORT
               valueFrom:
                 configMapKeyRef:
                   name: ${CONFIGMAP_NAME}
-                  key: DB_PORT
+                  key: ${DB_PORT_KEY}
             - name: PGDATABASE
               valueFrom:
                 configMapKeyRef:
                   name: ${CONFIGMAP_NAME}
-                  key: DB_NAME
+                  key: ${DB_NAME_KEY}
             - name: PGSCHEMA
               valueFrom:
                 configMapKeyRef:
                   name: ${CONFIGMAP_NAME}
-                  key: DB_SCHEMA
+                  key: ${DB_SCHEMA_KEY}
             - name: PGUSER
               valueFrom:
                 configMapKeyRef:
                   name: ${CONFIGMAP_NAME}
-                  key: DB_USERNAME
+                  key: ${DB_USERNAME_KEY}
             - name: PGPASSWORD
               valueFrom:
                 secretKeyRef:
                   name: ${SECRET_NAME}
-                  key: DB_PASSWORD
+                  key: ${DB_PASSWORD_KEY}
