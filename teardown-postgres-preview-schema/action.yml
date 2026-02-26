@@ -10,7 +10,7 @@ inputs:
   configmap-name:
     description: 'Name of the ConfigMap containing database connection details'
     required: false
-    default: 'app-spring-deployment-env'
+    default: 'app-spring-deployment-environments'
   secret-name:
     description: 'Name of the secret containing DB password'
     required: false
