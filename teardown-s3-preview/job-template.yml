@@ -1,0 +1,79 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: JOB_NAME_PLACEHOLDER
+spec:
+  ttlSecondsAfterFinished: 60
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: teardown-s3-preview
+          image: amazon/aws-cli:2
+          command: [ "bash", "-c" ]
+          args:
+            - |
+              set -e
+              
+              echo "### START $(date --iso-8601=seconds) ###"
+              
+              S3_ARGS=""
+              if [ -n "$S3_ENDPOINT" ]; then
+                S3_ARGS="--endpoint-url $S3_ENDPOINT"
+              fi
+              
+              S3_PREVIEW_PREFIX="s3://$S3_BUCKET/preview-$PREVIEW_NUMBER/"
+              
+              echo "Checking if $S3_PREVIEW_PREFIX exists..."
+              if [ "$(aws s3 $S3_ARGS ls "$S3_PREVIEW_PREFIX" | wc -l)" -eq 0 ]; then
+                echo "$S3_PREVIEW_PREFIX does not exist or is empty. Skipping teardown."
+                echo "Script finished successfully!"
+                echo "### END $(date --iso-8601=seconds) ###"
+                exit 0
+              fi
+
+              echo "Removing $S3_PREVIEW_PREFIX recursively..."
+              aws s3 $S3_ARGS rm "$S3_PREVIEW_PREFIX" --recursive
+              
+              echo "Script finished successfully!"
+              echo "### END $(date --iso-8601=seconds) ###"
+          env:
+            - name: S3_BUCKET
+              valueFrom:
+                configMapKeyRef:
+                  name: CONFIGMAP_NAME_PLACEHOLDER
+                  key: S3_BUCKET
+            - name: S3_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  name: CONFIGMAP_NAME_PLACEHOLDER
+                  key: S3_ENDPOINT
+                  optional: true
+            - name: AWS_REGION
+              valueFrom:
+                configMapKeyRef:
+                  name: CONFIGMAP_NAME_PLACEHOLDER
+                  key: AWS_REGION
+            - name: AWS_DEFAULT_REGION
+              valueFrom:
+                configMapKeyRef:
+                  name: CONFIGMAP_NAME_PLACEHOLDER
+                  key: AWS_REGION
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: SECRET_NAME_PLACEHOLDER
+                  key: AWS_ACCESS_KEY_ID
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: SECRET_NAME_PLACEHOLDER
+                  key: AWS_SECRET_ACCESS_KEY
+            - name: AWS_SESSION_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: SECRET_NAME_PLACEHOLDER
+                  key: AWS_SESSION_TOKEN
+                  optional: true
+            - name: PREVIEW_NUMBER
+              value: "PREVIEW_NUMBER_PLACEHOLDER"
