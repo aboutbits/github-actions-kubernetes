@@ -1,16 +1,16 @@
 name: 'Teardown PostgreSQL Preview Schema'
 description: 'Drops the PostgreSQL preview schema'
 inputs:
-  configmap-name:
-    description: 'Name of the ConfigMap'
-    required: false
-    default: 'app-spring-deployment-env'
   namespace:
     description: 'Kubernetes namespace'
     required: true
   preview-number:
     description: 'Preview number (PR number)'
     required: true
+  configmap-name:
+    description: 'Name of the ConfigMap containing database connection details'
+    required: false
+    default: 'app-spring-deployment-env'
   secret-name:
     description: 'Name of the secret containing DB password'
     required: false

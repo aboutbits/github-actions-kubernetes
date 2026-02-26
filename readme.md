@@ -110,7 +110,7 @@ The following inputs can be used as `step.with` keys:
 
 | Name              | Required/Default | Description                                |
 |-------------------|------------------|--------------------------------------------|
-| `configmap-name`  | `app-spring-deployment-env` | Name of the ConfigMap           |
+| `configmap-name`  | `app-spring-deployment-env` | Name of the ConfigMap containing database connection details |
 | `namespace`       | required         | Kubernetes namespace                       |
 | `preview-number`  | required         | Preview number (PR number)                 |
 | `secret-name`     | `app-secrets`    | Name of the secret containing PostgreSQL password |
@@ -143,7 +143,7 @@ The following inputs can be used as `step.with` keys:
 
 | Name              | Required/Default | Description                                |
 |-------------------|------------------|--------------------------------------------|
-| `configmap-name`  | `app-spring-deployment-env` | Name of the ConfigMap           |
+| `configmap-name`  | `app-spring-deployment-env` | Name of the ConfigMap containing database connection details |
 | `namespace`       | required         | Kubernetes namespace                       |
 | `preview-number`  | required         | Preview number (PR number)                 |
 | `secret-name`     | `app-secrets`    | Name of the secret containing PostgreSQL password |
