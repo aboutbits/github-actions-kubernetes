@@ -1,15 +1,16 @@
 name: 'Setup PostgreSQL Preview Schema'
 description: 'Sets up a PostgreSQL preview schema by cloning a base schema'
 inputs:
-  deployment-name:
-    description: 'Name of the deployment (used for ConfigMap name)'
-    required: true
   namespace:
     description: 'Kubernetes namespace'
     required: true
   preview-number:
     description: 'Preview number (PR number)'
     required: true
+  configmap-name:
+    description: 'Name of the ConfigMap containing database connection details'
+    required: false
+    default: 'app-spring-deployment-environments'
   secret-name:
     description: 'Name of the secret containing DB password'
     required: false
@@ -22,6 +23,30 @@ inputs:
     description: 'Base schema to copy from'
     required: false
     default: 'main'
+  db-host-key:
+    description: 'Key for DB_HOST in ConfigMap'
+    required: false
+    default: 'DB_HOST'
+  db-port-key:
+    description: 'Key for DB_PORT in ConfigMap'
+    required: false
+    default: 'DB_PORT'
+  db-name-key:
+    description: 'Key for DB_NAME in ConfigMap'
+    required: false
+    default: 'DB_NAME'
+  db-schema-key:
+    description: 'Key for DB_SCHEMA in ConfigMap'
+    required: false
+    default: 'DB_SCHEMA'
+  db-username-key:
+    description: 'Key for DB_USERNAME in ConfigMap'
+    required: false
+    default: 'DB_USERNAME'
+  db-password-key:
+    description: 'Key for DB_PASSWORD in Secret'
+    required: false
+    default: 'DB_PASSWORD'
 
 runs:
   using: "composite"
@@ -29,11 +54,17 @@ runs:
     - name: Prepare setup-schema job
       env:
         JOB_NAME: "prepare-schema-preview-${{ inputs.preview-number }}"
-        CONFIGMAP_NAME: "${{ inputs.deployment-name }}-environments"
+        CONFIGMAP_NAME: "${{ inputs.configmap-name }}"
         SECRET_NAME: "${{ inputs.secret-name }}"
         PREVIEW_SCHEMA_NAME: "preview_${{ inputs.preview-number }}"
         POSTGRES_IMAGE: "${{ inputs.postgres-image }}"
         BASE_SCHEMA: "${{ inputs.base-schema }}"
+        DB_HOST_KEY: "${{ inputs.db-host-key }}"
+        DB_PORT_KEY: "${{ inputs.db-port-key }}"
+        DB_NAME_KEY: "${{ inputs.db-name-key }}"
+        DB_SCHEMA_KEY: "${{ inputs.db-schema-key }}"
+        DB_USERNAME_KEY: "${{ inputs.db-username-key }}"
+        DB_PASSWORD_KEY: "${{ inputs.db-password-key }}"
       run: |
         envsubst '
           $JOB_NAME
@@ -42,6 +73,12 @@ runs:
           $PREVIEW_SCHEMA_NAME
           $POSTGRES_IMAGE
           $BASE_SCHEMA
+          $DB_HOST_KEY
+          $DB_PORT_KEY
+          $DB_NAME_KEY
+          $DB_SCHEMA_KEY
+          $DB_USERNAME_KEY
+          $DB_PASSWORD_KEY
         ' < ${{ github.action_path }}/job-template.yml > job-setup-schema.yml
 
         echo "Prepared job manifest: job-setup-schema.yml"
