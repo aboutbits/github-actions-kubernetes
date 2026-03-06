@@ -20,6 +20,10 @@ spec:
               
               echo "### START $(date --iso-8601=seconds) ###"
               
+              if [ "$S3_FORCE_PATH_STYLE_ACCESS" = "true" ]; then
+                aws configure set default.s3.addressing_style path
+              fi
+              
               S3_ARGS=""
               if [ -n "$S3_ENDPOINT" ]; then
                 S3_ARGS="--endpoint-url $S3_ENDPOINT"
@@ -52,31 +56,26 @@ spec:
                   name: ${CONFIGMAP_NAME}
                   key: ${S3_ENDPOINT_KEY}
                   optional: true
-            - name: AWS_REGION
-              valueFrom:
-                configMapKeyRef:
-                  name: ${CONFIGMAP_NAME}
-                  key: ${AWS_REGION_KEY}
             - name: AWS_DEFAULT_REGION
               valueFrom:
                 configMapKeyRef:
                   name: ${CONFIGMAP_NAME}
-                  key: ${AWS_REGION_KEY}
+                  key: ${S3_REGION_KEY}
+            - name: S3_FORCE_PATH_STYLE_ACCESS
+              valueFrom:
+                configMapKeyRef:
+                  name: ${CONFIGMAP_NAME}
+                  key: ${S3_FORCE_PATH_STYLE_ACCESS_KEY}
+                  optional: true
             - name: AWS_ACCESS_KEY_ID
               valueFrom:
                 secretKeyRef:
                   name: ${SECRET_NAME}
-                  key: ${AWS_ACCESS_KEY_ID_KEY}
+                  key: ${S3_ACCESS_KEY_KEY}
             - name: AWS_SECRET_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
                   name: ${SECRET_NAME}
-                  key: ${AWS_SECRET_ACCESS_KEY_KEY}
-            - name: AWS_SESSION_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  name: ${SECRET_NAME}
-                  key: ${AWS_SESSION_TOKEN_KEY}
-                  optional: true
+                  key: ${S3_SECRET_KEY_KEY}
             - name: PREVIEW_NUMBER
               value: "${PREVIEW_NUMBER}"

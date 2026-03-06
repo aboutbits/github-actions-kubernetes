@@ -110,17 +110,17 @@ The following inputs can be used as `step.with` keys:
 
 | Name                        | Required/Default            | Description                                         |
 |-----------------------------|-----------------------------|-----------------------------------------------------|
-| `configmap-name`            | `app-spring-deployment-env` | Name of the ConfigMap                               |
+| `configmap-name`            | `app-spring-deployment-environments` | Name of the ConfigMap                               |
 | `namespace`                 | required                    | Kubernetes namespace                                |
 | `preview-number`            | required                    | Preview number (PR number)                          |
-| `secret-name`               | `app-secrets`               | Name of the secret containing AWS credentials       |
+| `secret-name`               | `app-secrets`               | Name of the secret containing credentials           |
 | `s3-bucket-key`             | `S3_BUCKET`                 | Key for S3_BUCKET in ConfigMap                      |
 | `s3-endpoint-key`           | `S3_ENDPOINT`               | Key for S3_ENDPOINT in ConfigMap                    |
-| `aws-region-key`            | `AWS_REGION`                | Key for AWS_REGION in ConfigMap                     |
-| `aws-access-key-id-key`     | `AWS_ACCESS_KEY_ID`         | Key for AWS_ACCESS_KEY_ID in Secret                 |
-| `aws-secret-access-key-key` | `AWS_SECRET_ACCESS_KEY`     | Key for AWS_SECRET_ACCESS_KEY in Secret             |
-| `aws-session-token-key`     | `AWS_SESSION_TOKEN`         | Key for AWS_SESSION_TOKEN in Secret                 |
-| `base-prefix`               | `main`                      | Base prefix to copy from                            |
+| `s3-region-key`             | `S3_REGION`                 | Key for S3_REGION in ConfigMap                      |
+| `s3-root-folder-key`         | `S3_ROOT_FOLDER`            | Key for S3_ROOT_FOLDER in ConfigMap                 |
+| `s3-force-path-style-access-key` | `S3_FORCE_PATH_STYLE_ACCESS` | Key for S3_FORCE_PATH_STYLE_ACCESS in ConfigMap |
+| `s3-access-key-key`         | `S3_ACCESS_KEY`             | Key for S3_ACCESS_KEY in Secret                     |
+| `s3-secret-key-key`         | `S3_SECRET_KEY`             | Key for S3_SECRET_KEY in Secret                     |
 
 ### Teardown S3 Preview
 
@@ -142,16 +142,16 @@ The following inputs can be used as `step.with` keys:
 
 | Name                        | Required/Default            | Description                                         |
 |-----------------------------|-----------------------------|-----------------------------------------------------|
-| `configmap-name`            | `app-spring-deployment-env` | Name of the ConfigMap                               |
+| `configmap-name`            | `app-spring-deployment-environments` | Name of the ConfigMap                               |
 | `namespace`                 | required                    | Kubernetes namespace                                |
 | `preview-number`            | required                    | Preview number (PR number)                          |
-| `secret-name`               | `app-secrets`               | Name of the secret containing AWS credentials       |
+| `secret-name`               | `app-secrets`               | Name of the secret containing credentials           |
 | `s3-bucket-key`             | `S3_BUCKET`                 | Key for S3_BUCKET in ConfigMap                      |
 | `s3-endpoint-key`           | `S3_ENDPOINT`               | Key for S3_ENDPOINT in ConfigMap                    |
-| `aws-region-key`            | `AWS_REGION`                | Key for AWS_REGION in ConfigMap                     |
-| `aws-access-key-id-key`     | `AWS_ACCESS_KEY_ID`         | Key for AWS_ACCESS_KEY_ID in Secret                 |
-| `aws-secret-access-key-key` | `AWS_SECRET_ACCESS_KEY`     | Key for AWS_SECRET_ACCESS_KEY in Secret             |
-| `aws-session-token-key`     | `AWS_SESSION_TOKEN`         | Key for AWS_SESSION_TOKEN in Secret                 |
+| `s3-region-key`             | `S3_REGION`                 | Key for S3_REGION in ConfigMap                      |
+| `s3-force-path-style-access-key` | `S3_FORCE_PATH_STYLE_ACCESS` | Key for S3_FORCE_PATH_STYLE_ACCESS in ConfigMap |
+| `s3-access-key-key`         | `S3_ACCESS_KEY`             | Key for S3_ACCESS_KEY in Secret                     |
+| `s3-secret-key-key`         | `S3_SECRET_KEY`             | Key for S3_SECRET_KEY in Secret                     |
 
 ### Setup PostgreSQL Preview Schema
 
