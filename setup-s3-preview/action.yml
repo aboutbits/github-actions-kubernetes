@@ -11,6 +11,10 @@ inputs:
     description: 'Name of the ConfigMap'
     required: false
     default: 'app-spring-deployment-environments'
+  secret-name:
+    description: 'Name of the secret containing credentials'
+    required: false
+    default: 'app-secrets'
   s3-bucket-key:
     description: 'Key for S3_BUCKET in ConfigMap'
     required: false
@@ -31,10 +35,6 @@ inputs:
     description: 'Key for S3_FORCE_PATH_STYLE_ACCESS in ConfigMap'
     required: false
     default: 'S3_FORCE_PATH_STYLE_ACCESS'
-  secret-name:
-    description: 'Name of the secret containing credentials'
-    required: false
-    default: 'app-secrets'
   s3-access-key-key:
     description: 'Key for S3_ACCESS_KEY in Secret'
     required: false
