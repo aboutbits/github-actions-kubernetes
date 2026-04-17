@@ -12,7 +12,7 @@ spec:
       restartPolicy: Never
       containers:
         - name: teardown-s3-preview
-          image: amazon/aws-cli:2
+          image: amazon/aws-cli:2.34.31
           command: [ "bash", "-c" ]
           args:
             - |
