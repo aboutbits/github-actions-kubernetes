@@ -109,8 +109,8 @@ The following inputs can be used as `step.with` keys:
 
 | Name           | Required/Default | Description                    |
 |----------------|------------------|--------------------------------|
-| `release-name` | required         | The name of the Helm release   |
 | `namespace`    | required         | The namespace of the Helm release |
+| `release-name` | required         | The name of the Helm release   |
 
 ### Setup S3 Preview
 
