@@ -90,6 +90,28 @@ The following inputs can be used as `step.with` keys:
 | `timeout`            | `5m`             | The timeout for the Helm command                                 |
 | `working-directory`  | `.`              | The working directory where the action commands will operate     |
 
+### Helm Undeploy
+
+Undeploy a Helm deployment from a Kubernetes cluster. Checks if the release exists before attempting uninstall and detects permission errors. Requires Kubernetes to be configured first.
+
+#### Example
+
+```yaml
+  - uses: aboutbits/github-actions-kubernetes/helm-undeploy@v4
+    with:
+      release-name: my-app
+      namespace: my-namespace
+```
+
+#### Inputs
+
+The following inputs can be used as `step.with` keys:
+
+| Name           | Required/Default | Description                    |
+|----------------|------------------|--------------------------------|
+| `namespace`    | required         | The namespace of the Helm release |
+| `release-name` | required         | The name of the Helm release   |
+
 ### Setup S3 Preview
 
 Creates an S3 preview prefix by copying from the main prefix.
