@@ -1,0 +1,39 @@
+name: "Helm Delete Deployment"
+description: "Delete a Helm deployment from a Kubernetes cluster"
+
+inputs:
+  namespace:
+    description: "The namespace of the Helm release"
+    required: true
+  release-name:
+    description: "The name of the Helm release"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Delete Helm deployment
+      env:
+        HELM_DRIVER: configmaps
+      run: |
+        RELEASE_NAME="${{ inputs.release-name }}"
+        NAMESPACE="${{ inputs.namespace }}"
+
+        echo "Checking Helm release: $RELEASE_NAME in namespace: $NAMESPACE"
+
+        STATUS_OUTPUT=$(helm status "$RELEASE_NAME" --namespace "$NAMESPACE" 2>&1) && STATUS_EXIT=0 || STATUS_EXIT=$?
+
+        if [ $STATUS_EXIT -eq 0 ]; then
+          echo "Release found. Uninstalling..."
+          helm uninstall "$RELEASE_NAME" --namespace "$NAMESPACE"
+        else
+          if echo "$STATUS_OUTPUT" | grep -qi "forbidden\|cannot list\|unauthorized\|permission"; then
+            echo "::error::Permission denied when querying release '$RELEASE_NAME'. Check kubeconfig and RBAC permissions."
+            echo "$STATUS_OUTPUT"
+            exit 1
+          else
+            echo "Release '$RELEASE_NAME' not found, skipping uninstall."
+            echo "$STATUS_OUTPUT"
+          fi
+        fi
+      shell: bash
