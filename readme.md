@@ -90,14 +90,14 @@ The following inputs can be used as `step.with` keys:
 | `timeout`            | `5m`             | The timeout for the Helm command                                 |
 | `working-directory`  | `.`              | The working directory where the action commands will operate     |
 
-### Delete Helm Deployment
+### Helm Undeploy
 
-Delete a Helm deployment from a Kubernetes cluster. Checks if the release exists before attempting uninstall and detects permission errors. Requires Kubernetes to be configured first.
+Undeploy a Helm deployment from a Kubernetes cluster. Checks if the release exists before attempting uninstall and detects permission errors. Requires Kubernetes to be configured first.
 
 #### Example
 
 ```yaml
-  - uses: aboutbits/github-actions-kubernetes/helm-delete@v4
+  - uses: aboutbits/github-actions-kubernetes/helm-undeploy@v4
     with:
       release-name: my-app
       namespace: my-namespace

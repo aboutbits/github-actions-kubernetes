@@ -1,5 +1,5 @@
-name: "Helm Delete Deployment"
-description: "Delete a Helm deployment from a Kubernetes cluster"
+name: "Helm Undeploy"
+description: "Undeploy a Helm deployment from a Kubernetes cluster"
 
 inputs:
   namespace:
