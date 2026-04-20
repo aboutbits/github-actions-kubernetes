@@ -119,7 +119,7 @@ Creates an S3 preview prefix by copying from the main prefix.
 #### Example
 
 ```yaml
-  - uses: aboutbits/github-actions-kubernetes/setup-s3-preview@v3
+  - uses: aboutbits/github-actions-kubernetes/setup-s3-preview@v4
     with:
       configmap-name: my-app-environments
       namespace: my-namespace
@@ -151,7 +151,7 @@ Deletes the S3 preview prefix.
 #### Example
 
 ```yaml
-  - uses: aboutbits/github-actions-kubernetes/teardown-s3-preview@v3
+  - uses: aboutbits/github-actions-kubernetes/teardown-s3-preview@v4
     with:
       configmap-name: my-app-environments
       namespace: my-namespace
