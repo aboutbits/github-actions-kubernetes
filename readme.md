@@ -90,6 +90,69 @@ The following inputs can be used as `step.with` keys:
 | `timeout`            | `5m`             | The timeout for the Helm command                                 |
 | `working-directory`  | `.`              | The working directory where the action commands will operate     |
 
+### Setup S3 Preview
+
+Creates an S3 preview prefix by copying from the main prefix.
+
+#### Example
+
+```yaml
+  - uses: aboutbits/github-actions-kubernetes/setup-s3-preview@v3
+    with:
+      configmap-name: my-app-environments
+      namespace: my-namespace
+      preview-number: ${{ github.event.number }}
+```
+
+#### Inputs
+
+The following inputs can be used as `step.with` keys:
+
+| Name                        | Required/Default            | Description                                         |
+|-----------------------------|-----------------------------|-----------------------------------------------------|
+| `configmap-name`            | `app-spring-deployment-environments` | Name of the ConfigMap                               |
+| `namespace`                 | required                    | Kubernetes namespace                                |
+| `preview-number`            | required                    | Preview number (PR number)                          |
+| `secret-name`               | `app-secrets`               | Name of the secret containing credentials           |
+| `s3-bucket-key`             | `S3_BUCKET`                 | Key for S3_BUCKET in ConfigMap                      |
+| `s3-endpoint-key`           | `S3_ENDPOINT`               | Key for S3_ENDPOINT in ConfigMap                    |
+| `s3-region-key`             | `S3_REGION`                 | Key for S3_REGION in ConfigMap                      |
+| `s3-root-folder-key`         | `S3_ROOT_FOLDER`            | Key for S3_ROOT_FOLDER in ConfigMap                 |
+| `s3-force-path-style-access-key` | `S3_FORCE_PATH_STYLE_ACCESS` | Key for S3_FORCE_PATH_STYLE_ACCESS in ConfigMap |
+| `s3-access-key-key`         | `S3_ACCESS_KEY`             | Key for S3_ACCESS_KEY in Secret                     |
+| `s3-secret-key-key`         | `S3_SECRET_KEY`             | Key for S3_SECRET_KEY in Secret                     |
+
+### Teardown S3 Preview
+
+Deletes the S3 preview prefix.
+
+#### Example
+
+```yaml
+  - uses: aboutbits/github-actions-kubernetes/teardown-s3-preview@v3
+    with:
+      configmap-name: my-app-environments
+      namespace: my-namespace
+      preview-number: ${{ github.event.number }}
+```
+
+#### Inputs
+
+The following inputs can be used as `step.with` keys:
+
+| Name                        | Required/Default            | Description                                         |
+|-----------------------------|-----------------------------|-----------------------------------------------------|
+| `configmap-name`            | `app-spring-deployment-environments` | Name of the ConfigMap                               |
+| `namespace`                 | required                    | Kubernetes namespace                                |
+| `preview-number`            | required                    | Preview number (PR number)                          |
+| `secret-name`               | `app-secrets`               | Name of the secret containing credentials           |
+| `s3-bucket-key`             | `S3_BUCKET`                 | Key for S3_BUCKET in ConfigMap                      |
+| `s3-endpoint-key`           | `S3_ENDPOINT`               | Key for S3_ENDPOINT in ConfigMap                    |
+| `s3-region-key`             | `S3_REGION`                 | Key for S3_REGION in ConfigMap                      |
+| `s3-force-path-style-access-key` | `S3_FORCE_PATH_STYLE_ACCESS` | Key for S3_FORCE_PATH_STYLE_ACCESS in ConfigMap |
+| `s3-access-key-key`         | `S3_ACCESS_KEY`             | Key for S3_ACCESS_KEY in Secret                     |
+| `s3-secret-key-key`         | `S3_SECRET_KEY`             | Key for S3_SECRET_KEY in Secret                     |
+
 ### Setup PostgreSQL Preview Schema
 
 Sets up a PostgreSQL preview schema by cloning a base schema.
