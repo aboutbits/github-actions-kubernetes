@@ -36,8 +36,8 @@ spec:
                 S3_SOURCE_PREFIX="s3://$S3_BUCKET/"
               fi
 
-              S3_PREVIEW_PREFIX="s3://$S3_BUCKET/preview-${PREVIEW_NUMBER}/"
-              
+              S3_PREVIEW_PREFIX="s3://$S3_BUCKET/${PREVIEW_ROOT_FOLDER}/"
+
               echo "Checking if $S3_PREVIEW_PREFIX already exists..."
               if [ "$(aws s3 $S3_ARGS ls "$S3_PREVIEW_PREFIX" | wc -l)" -gt 0 ]; then
                 echo "$S3_PREVIEW_PREFIX already exists. Skipping setup."
@@ -90,5 +90,5 @@ spec:
                 secretKeyRef:
                   name: ${SECRET_NAME}
                   key: ${S3_SECRET_KEY_KEY}
-            - name: PREVIEW_NUMBER
-              value: "${PREVIEW_NUMBER}"
+            - name: PREVIEW_ROOT_FOLDER
+              value: "${PREVIEW_ROOT_FOLDER}"

@@ -29,7 +29,7 @@ spec:
                 S3_ARGS="--endpoint-url $S3_ENDPOINT"
               fi
               
-              S3_PREVIEW_PREFIX="s3://$S3_BUCKET/preview-${PREVIEW_NUMBER}/"
+              S3_PREVIEW_PREFIX="s3://$S3_BUCKET/${PREVIEW_ROOT_FOLDER}/"
               
               echo "Checking if $S3_PREVIEW_PREFIX exists..."
               if [ "$(aws s3 $S3_ARGS ls "$S3_PREVIEW_PREFIX" | wc -l)" -eq 0 ]; then
@@ -77,5 +77,5 @@ spec:
                 secretKeyRef:
                   name: ${SECRET_NAME}
                   key: ${S3_SECRET_KEY_KEY}
-            - name: PREVIEW_NUMBER
-              value: "${PREVIEW_NUMBER}"
+            - name: PREVIEW_ROOT_FOLDER
+              value: "${PREVIEW_ROOT_FOLDER}"
