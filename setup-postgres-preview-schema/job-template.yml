@@ -39,7 +39,7 @@ spec:
               echo "Modifying dump file..."
               sed -i preview-dump.sql \
                   -e "s/\"${BASE_SCHEMA}\"/\"${PREVIEW_SCHEMA_NAME}\"/g" \
-                  -e 's/SET /--SET /g' \
+                  -e 's/^SET /--SET /' \
                   -e 's/SELECT pg_catalog/--SELECT pg_catalog/g' \
                   -e 's/--SELECT pg_catalog.setval/SELECT pg_catalog.setval/g'
               
