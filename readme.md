@@ -20,11 +20,14 @@ Setup kubectl and Helm using kubeconfig file.
 
 The following inputs can be used as `step.with` keys:
 
-| Name           | Required/Default | Description                 |
-|----------------|------------------|-----------------------------|
-| `kubeconfig`   | required         | The kubeconfig file content |
-| `kube-version` | `v1.33.1`        | The version of kubectl      |
-| `helm-version` | `v3.17.3`        | The version of Helm         |
+| Name              | Required/Default | Description                 |
+|-------------------|------------------|-----------------------------|
+| `kubeconfig`      | required         | The kubeconfig file content |
+| `kubectl-version` | `v1.36`          | The version of kubectl      |
+| `helm-version`    | `v3.21.4`        | The version of Helm         |
+
+The `kubectl-version` input accepts a `major.minor` value, such as `v1.36`.
+The action then installs the latest patch of that minor version. The `helm-version` input needs a full version.
 
 ### Deploy to Kubernetes using kubectl
 

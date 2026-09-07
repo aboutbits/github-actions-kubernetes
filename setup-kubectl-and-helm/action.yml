@@ -8,17 +8,17 @@ inputs:
   kubectl-version:
     description: 'kubectl version'
     required: false
-    default: 'v1.33.1'
+    default: 'v1.36'
   helm-version:
     description: 'Helm version'
     required: false
-    default: 'v3.17.3'
+    default: 'v3.21.4'
 
 runs:
   using: "composite"
   steps:
     - name: Setup kubectl
-      uses: azure/setup-kubectl@v4
+      uses: azure/setup-kubectl@v5
       with:
         version: ${{ inputs.kubectl-version }}
     - name: Setup kubeconfig file
@@ -28,6 +28,6 @@ runs:
         chmod 600 ~/.kube/config
       shell: bash
     - name: Setup Helm
-      uses: azure/setup-helm@v4
+      uses: azure/setup-helm@v5
       with:
         version: ${{ inputs.helm-version }}
