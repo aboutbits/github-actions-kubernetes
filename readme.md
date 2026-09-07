@@ -11,7 +11,7 @@ Setup kubectl and Helm using kubeconfig file.
 #### Example
 
 ```yaml
-  - uses: aboutbits/github-actions-kubernetes/setup-kubectl-and-helm@v2
+  - uses: aboutbits/github-actions-kubernetes/setup-kubectl-and-helm@v4
     with:
       kubeconfig: ${{ secrets.KUBECONFIG }}
 ```
@@ -36,7 +36,7 @@ Deploy application to a Kubernetes Cluster. Requires Kubernetes to be configured
 #### Example
 
 ```yaml
-  - uses: aboutbits/github-actions-kubernetes/kubectl-deploy@v2
+  - uses: aboutbits/github-actions-kubernetes/kubectl-deploy@v4
     with:
       deployment-file: 'infrastructure/kubernetes.prod.yml'
       namespace-name: ${{ env.NAMESPACE_NAME }}
@@ -61,7 +61,7 @@ Deploy an application to a Kubernetes cluster using its Helm chart. Requires Kub
 #### Example
 
 ```yaml
-  - uses: aboutbits/github-actions-kubernetes/helm-deploy@v2
+  - uses: aboutbits/github-actions-kubernetes/helm-deploy@v4
     with:
       helm-chart-version: "1.0.0"
       helm-package: "my-app-chart"
@@ -100,7 +100,7 @@ Undeploy a Helm deployment from a Kubernetes cluster. Checks if the release exis
 #### Example
 
 ```yaml
-  - uses: aboutbits/github-actions-kubernetes/helm-undeploy@v2
+  - uses: aboutbits/github-actions-kubernetes/helm-undeploy@v4
     with:
       release-name: my-app
       namespace: my-namespace
@@ -122,7 +122,7 @@ Creates an S3 preview prefix by copying from the main prefix.
 #### Example
 
 ```yaml
-  - uses: aboutbits/github-actions-kubernetes/setup-s3-preview@v2
+  - uses: aboutbits/github-actions-kubernetes/setup-s3-preview@v4
     with:
       configmap-name: my-app-environments
       namespace: my-namespace
@@ -154,7 +154,7 @@ Deletes the S3 preview prefix.
 #### Example
 
 ```yaml
-  - uses: aboutbits/github-actions-kubernetes/teardown-s3-preview@v2
+  - uses: aboutbits/github-actions-kubernetes/teardown-s3-preview@v4
     with:
       configmap-name: my-app-environments
       namespace: my-namespace
@@ -185,7 +185,7 @@ Sets up a PostgreSQL preview schema by cloning a base schema.
 #### Example
 
 ```yaml
-  - uses: aboutbits/github-actions-kubernetes/setup-postgres-preview-schema@v2
+  - uses: aboutbits/github-actions-kubernetes/setup-postgres-preview-schema@v4
     with:
       configmap-name: my-app-environments
       namespace: my-namespace
@@ -218,7 +218,7 @@ Drops the PostgreSQL preview schema.
 #### Example
 
 ```yaml
-  - uses: aboutbits/github-actions-kubernetes/teardown-postgres-preview-schema@v2
+  - uses: aboutbits/github-actions-kubernetes/teardown-postgres-preview-schema@v4
     with:
       configmap-name: my-app-environments
       namespace: my-namespace
