@@ -29,6 +29,7 @@ spec:
 
               echo "Dumping base schema ${BASE_SCHEMA}..."
               pg_dump --schema=${BASE_SCHEMA} \
+                      --exclude-table-data="${BASE_SCHEMA}.databasechangeloglock" \
                       --no-comments \
                       --no-owner \
                       --no-acl \
@@ -48,7 +49,6 @@ spec:
                    --echo-errors \
                    --single-transaction \
                    --set=ON_ERROR_STOP=1 \
-                   --set=SESSION_REPLICATION_ROLE=replica \
                    --file=preview-dump.sql
               
               echo "Script finished successfully!"
